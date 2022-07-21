@@ -3,7 +3,7 @@ from variable.model import ReluTypeEnum
 
 
 class ReluLayer(nn.Module):
-    def __init__(self, num_channels, relu_type=ReluTypeEnum.RELU):
+    def __init__(self, num_channel, relu_type=ReluTypeEnum.RELU):
         super(ReluLayer, self).__init__()
 
         if relu_type == ReluTypeEnum.RELU:
@@ -11,7 +11,7 @@ class ReluLayer(nn.Module):
         elif relu_type == ReluTypeEnum.LEAKY_RELU:
             self.relu = nn.LeakyReLU(0.2, inplace=True)
         elif relu_type == ReluTypeEnum.PRELU:
-            self.relu = nn.PReLU(num_channels)
+            self.relu = nn.PReLU(num_channel)
         elif relu_type == ReluTypeEnum.SELU:
             self.relu = nn.SELU(True)
         elif relu_type is None:

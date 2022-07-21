@@ -76,12 +76,12 @@ def run_image_augmentation(
 
 
 def convert_to_one_hot(image):
-    num_labels = len(MASK_COLORMAP)
+    num_label = len(MASK_COLORMAP)
     image = np.array(image, dtype=np.unit8)
     height, width = image.shape[:2]
-    one_hot_label = np.zeros((num_labels, height, width))
-    colormap = np.array(MASK_COLORMAP).reshape(num_labels, 1, 1, 3)
-    colormap = np.tile(colormap, (1, height, width, 1))  # output dimension: (num_labels, height, width, 3)
+    one_hot_label = np.zeros((num_label, height, width))
+    colormap = np.array(MASK_COLORMAP).reshape(num_label, 1, 1, 3)
+    colormap = np.tile(colormap, (1, height, width, 1))  # output dimension: (num_label, height, width, 3)
 
     for idx, color in enumerate(MASK_COLORMAP):
         label = (colormap[idx] == image)

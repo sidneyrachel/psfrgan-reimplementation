@@ -8,8 +8,8 @@ from model.norm_layer import NormLayer
 class ConvLayer(nn.Module):
     def __init__(
             self,
-            in_channels,
-            out_channels,
+            in_channel,
+            out_channel,
             kernel_size=3,
             scale=None,
             norm_type=None,
@@ -20,7 +20,7 @@ class ConvLayer(nn.Module):
         super(ConvLayer, self).__init__()
         self.is_padding_used = is_padding_used
         self.norm_type = norm_type
-        self.in_channels = in_channels
+        self.in_channel = in_channel
         self.is_bias = is_bias
         self.scale = scale
 
@@ -35,14 +35,14 @@ class ConvLayer(nn.Module):
             self.scale_function = lambda inp: inp
 
         self.reflection_padding_2d = nn.ReflectionPad2d(int(np.ceil((kernel_size - 1.) / 2)))
-        self.conv_2d = nn.Conv2d(in_channels, out_channels, kernel_size, stride, bias=self.is_bias)
+        self.conv_2d = nn.Conv2d(in_channel, out_channel, kernel_size, stride, bias=self.is_bias)
         self.average_pooling_2d = nn.AvgPool2d(2, 2)
         self.relu = ReluLayer(
-            num_channels=out_channels,
+            num_channel=out_channel,
             relu_type=relu_type
         )
         self.norm = NormLayer(
-            num_channels=out_channels,
+            num_channel=out_channel,
             norm_type=norm_type
         )
 

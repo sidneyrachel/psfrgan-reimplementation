@@ -12,8 +12,8 @@ class FPNModel(nn.Module):
             in_size=128,
             out_size=128,
             min_feature_size=32,
-            base_channels=64,
-            parsing_channels=19,
+            base_channel=64,
+            parsing_channel=19,
             residual_depth=10,
             relu_type=ReluTypeEnum.PRELU,
             norm_type=NormTypeEnum.BN,
@@ -21,8 +21,8 @@ class FPNModel(nn.Module):
     ):
         super().__init__()
         self.residual_depth = residual_depth
-        min_channels, max_channels = channel_range
-        clip_channel_function = lambda channels: max(min_channels, min(channels, max_channels))
+        min_channel, max_channel = channel_range
+        clip_channel_function = lambda channel: max(min_channel, min(channel, max_channel))
         min_feat_size = min(in_size, min_feature_size)
 
         down_steps = int(np.log2(in_size // min_feat_size))
@@ -31,18 +31,18 @@ class FPNModel(nn.Module):
         self.encoders = []
         self.encoders.append(
             ConvLayer(
-                in_channels=3,
-                out_channels=base_channels
+                in_channel=3,
+                out_channel=base_channel
             )
         )
-        head_channels = base_channels
+        head_channel = base_channel
 
         for i in range(down_steps):
-            in_channels, out_channels = clip_channel_function(head_channels), clip_channel_function(head_channels * 2)
+            in_channel, out_channel = clip_channel_function(head_channel), clip_channel_function(head_channel * 2)
             self.encoders.append(
                 ResidualBlock(
-                    in_channels=in_channels,
-                    out_channels=out_channels,
+                    in_channel=in_channel,
+                    out_channel=out_channel,
                     scale=ScaleTypeEnum.DOWN,
                     relu_type=relu_type,
                     norm_type=norm_type
@@ -55,8 +55,8 @@ class FPNModel(nn.Module):
         for i in range(residual_depth):
             self.bodies.append(
                 ResidualBlock(
-                    in_channels=clip_channel_function(head_channel),
-                    out_channels=clip_channel_function(head_channel),
+                    in_channel=clip_channel_function(head_channel),
+                    out_channel=clip_channel_function(head_channel),
                     relu_type=relu_type,
                     norm_type=norm_type
                 )
@@ -65,11 +65,11 @@ class FPNModel(nn.Module):
         self.decoders = []
 
         for i in range(up_steps):
-            in_channels, out_channels = clip_channel_function(head_channel), clip_channel_function(head_channel // 2)
+            in_channel, out_channel = clip_channel_function(head_channel), clip_channel_function(head_channel // 2)
             self.decoders.append(
                 ResidualBlock(
-                    in_channels=in_channels,
-                    out_channels=out_channels,
+                    in_channel=in_channel,
+                    out_channel=out_channel,
                     scale=ScaleTypeEnum.UP,
                     relu_type=relu_type,
                     norm_type=norm_type
@@ -81,12 +81,12 @@ class FPNModel(nn.Module):
         self.body = nn.Sequential(*self.bodies)
         self.decoder = nn.Sequential(*self.decoders)
         self.image_conv = ConvLayer(
-            in_channels=clip_channel_function(head_channel),
-            out_channels=3
+            in_channel=clip_channel_function(head_channel),
+            out_channel=3
         )
         self.mask_conv = ConvLayer(
-            in_channels=clip_channel_function(head_channel),
-            out_channels=parsing_channel
+            in_channel=clip_channel_function(head_channel),
+            out_channel=parsing_channel
         )
 
     def forward(self, inp):

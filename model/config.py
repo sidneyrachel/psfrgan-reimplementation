@@ -35,16 +35,16 @@ class Config:
         return self.config['is_shuffled']
 
     @property
-    def num_threads(self):
-        return self.config['num_threads']
+    def num_thread(self):
+        return self.config['num_thread']
 
     @property
     def p_norm_type(self):
         return self.config['p_norm_type']
 
     @property
-    def num_gpus(self):
-        return self.config['num_gpus']
+    def num_gpu(self):
+        return self.config['num_gpu']
 
     @property
     def fpn_pretrained_weight_file(self):

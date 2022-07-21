@@ -8,7 +8,7 @@ from variable.model import ReluTypeEnum, NormTypeEnum
 class PSFRGenerator(nn.Module):
     def __init__(
             self,
-            out_channels,
+            out_channel,
             out_size=512,
             min_feat_size=16,
             relu_type=ReluTypeEnum.RELU,
@@ -17,8 +17,8 @@ class PSFRGenerator(nn.Module):
     ):
         super().__init__()
 
-        min_channels, max_channels = channel_range
-        clip_channel_function = lambda channels: max(min_channels, min(channels, max_channels))
+        min_channel, max_channel = channel_range
+        clip_channel_function = lambda channel: max(min_channel, min(channel, max_channel))
         get_channel = lambda size: clip_channel_function(1024 * 16 // size)
 
         self.const_input = nn.Parameter(
@@ -32,9 +32,9 @@ class PSFRGenerator(nn.Module):
         up_steps = int(np.log2(out_size // min_feat_size))
         self.up_steps = up_steps
 
-        ref_channels = 19 + 3
+        ref_channel = 19 + 3
 
-        head_channels = get_channel(min_feat_size)
+        head_channel = get_channel(min_feat_size)
         head = [
             nn.Conv2d(head_ch, head_ch, kernel_size=3, padding=1),
             SPADEResBlock(head_ch, head_ch, ref_ch, relu_type, norm_type),

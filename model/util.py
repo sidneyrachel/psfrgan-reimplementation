@@ -16,8 +16,8 @@ def build_fpn_model(
         in_size=in_size,
         out_size=out_size,
         min_feature_size=min_feat_size,
-        base_channels=64,
-        parsing_channels=19,
+        base_channel=64,
+        parsing_channel=19,
         relu_type=relu_type,
         norm_type=config.p_norm_type,
         channel_range=[32, 256]

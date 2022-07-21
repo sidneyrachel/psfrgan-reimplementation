@@ -6,25 +6,25 @@ from variable.model import NormTypeEnum
 class SPADENorm:
     def __init__(
             self,
-            norm_channels,
-            ref_channels,
+            norm_channel,
+            ref_channel,
             norm_type=NormTypeEnum.SPADE,
             kernel_size=3
     ):
         super().__init__()
 
-        self.param_free_norm = nn.InstanceNorm2d(norm_channels, affine=False)
-        mid_channels = 64
+        self.param_free_norm = nn.InstanceNorm2d(norm_channel, affine=False)
+        mid_channel = 64
 
         self.norm_type = norm_type
 
         if self.norm_type == NormTypeEnum.SPADE:
             self.conv_1 = nn.Sequential(
-                nn.Conv2d(ref_channels, mid_channels, kernel_size, 1, kernel_size // 2),
+                nn.Conv2d(ref_channel, mid_channel, kernel_size, 1, kernel_size // 2),
                 nn.LeakyReLU(0.2, True)
             )
-            self.gamma_conv = nn.Conv2d(mid_channels, norm_channels, kernel_size, 1, kernel_size // 2)
-            self.beta_conv = nn.Conv2d(mid_channels, norm_channels, kernel_size, 1, kernel_size // 2)
+            self.gamma_conv = nn.Conv2d(mid_channel, norm_channel, kernel_size, 1, kernel_size // 2)
+            self.beta_conv = nn.Conv2d(mid_channel, norm_channel, kernel_size, 1, kernel_size // 2)
 
     def calculate_gamma_beta(self, inp):
         outp = self.conv_1(inp)

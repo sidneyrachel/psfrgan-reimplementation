@@ -18,7 +18,7 @@ class CustomDataLoader:
             self.dataset,
             batch_size=config.batch_size,
             shuffle=config.is_shuffled,
-            num_workers=int(config.num_threads),
+            num_worker=int(config.num_thread),
             drop_last=drop_last
         )
 

@@ -6,20 +6,20 @@ from model.conv_layer import ConvLayer
 class ResidualBlock(nn.Module):
     def __init__(
             self,
-            in_channels,
-            out_channels,
+            in_channel,
+            out_channel,
             relu_type=ReluTypeEnum.PRELU,
             norm_type=NormTypeEnum.BN,
             scale=None
     ):
         super(ResidualBlock, self).__init__()
 
-        if scale is None and in_channels == out_channels:
+        if scale is None and in_channel == out_channel:
             self.shortcut_function = lambda inp: inp
         else:
             self.shortcut_function = ConvLayer(
-                in_channels=in_channels,
-                out_channels=out_channels,
+                in_channel=in_channel,
+                out_channel=out_channel,
                 kernel_size=3,
                 scale=scale
             )
@@ -34,8 +34,8 @@ class ResidualBlock(nn.Module):
             raise Exception(f'Scale is not supported. Scale: {scale}.')
 
         self.conv_1 = ConvLayer(
-            in_channels=in_channels,
-            out_channels=out_channels,
+            in_channel=in_channel,
+            out_channel=out_channel,
             kernel_size=3,
             scale=scale_configs[0],
             norm_type=norm_type,
@@ -43,8 +43,8 @@ class ResidualBlock(nn.Module):
         )
 
         self.conv_2 = ConvLayer(
-            in_channels=out_channels,
-            out_channels=out_channels,
+            in_channel=out_channel,
+            out_channel=out_channel,
             kernel_size=3,
             scale=scale_configs[1],
             norm_type=norm_type,
