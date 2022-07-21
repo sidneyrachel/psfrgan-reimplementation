@@ -33,14 +33,14 @@ class SPADENorm:
 
         return gamma, beta
 
-    def forward(self, inp, mask):
+    def forward(self, inp, reference_inp):
         normalized_input = self.param_free_norm(inp)
 
-        if inp.shape[-1] != mask.shape[-1]:
-            mask = nn.functional.interpolate(mask, inp.shape[2:], mode='bicubic', align_corners=False)
+        if inp.shape[-1] != reference_inp.shape[-1]:
+            reference_inp = nn.functional.interpolate(reference_inp, inp.shape[2:], mode='bicubic', align_corners=False)
 
         if self.norm_type == NormTypeEnum.SPADE:
-            gamma, beta = self.calculate_gamma_beta(mask)
+            gamma, beta = self.calculate_gamma_beta(reference_inp)
 
             return (normalized_input * gamma) + beta
         elif self.norm_type == NormTypeEnum.IN:

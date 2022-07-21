@@ -44,9 +44,9 @@ class StyleTransformBlock(nn.Module):
             relu_type=relu_type
         )
 
-    def forward(self, inp, mask):
-        res = self.conv_0(self.relu(self.norm_0(inp, mask)))
-        res = self.conv_1(self.relu(self.norm_1(res, mask)))
+    def forward(self, inp, reference_inp):
+        res = self.conv_0(self.relu(self.norm_0(inp, reference_inp)))
+        res = self.conv_1(self.relu(self.norm_1(res, reference_inp)))
         out = inp + res
 
         return out
