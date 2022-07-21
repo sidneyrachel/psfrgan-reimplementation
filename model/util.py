@@ -1,18 +1,32 @@
 import torch
+from torch import nn
 
-from variable.model import ReluTypeEnum
-from model.fpn_model import FPNModel
+from variable.model import ReluTypeEnum, GenDisNormTypeEnum
+from model.fpn import FPN
+from model.generator import Generator
 
 
-def build_fpn_model(
+def apply_norm(network, weight_norm_type):
+    for layer in network.modules():
+        if isinstance(layer, nn.Conv2d):
+            if weight_norm_type == GenDisNormTypeEnum.SPECTRAL:
+                nn.utils.spectral_norm(layer)
+            elif weight_norm_type == GenDisNormTypeEnum.WEIGHT:
+                nn.utils.weight_norm(layer)
+            else:
+                pass
+
+
+def build_fpn(
         config,
+        is_train=True,
         in_size=512,
         out_size=512,
         min_feat_size=32,
         relu_type=ReluTypeEnum.LEAKY_RELU,
         weight_path=None
 ):
-    fpn = FPNModel(
+    fpn = FPN(
         in_size=in_size,
         out_size=out_size,
         min_feature_size=min_feat_size,
@@ -23,7 +37,7 @@ def build_fpn_model(
         channel_range=[32, 256]
     )
 
-    if not config.is_train:
+    if not is_train:
         fpn.eval()
 
     if weight_path is not None:
@@ -35,3 +49,27 @@ def build_fpn_model(
         fpn = torch.nn.DataParallel(fpn, config.gpu_ids, output_device=config.device)
 
     return fpn
+
+
+def build_generator(
+        config,
+        is_train=True,
+        weight_norm_type=None,
+        relu_type=ReluTypeEnum.LEAKY_RELU):
+    gen = Generator(
+        out_channel=3,
+        out_size=config.generator_out_size,
+        relu_type=relu_type,
+        norm_type=config.generator_norm
+    )
+
+    apply_norm(gen, weight_norm_type)
+
+    if not is_train:
+        gen.eval()
+    if len(config.gpu_ids) > 0:
+        assert(torch.cuda.is_available())
+        gen.to(config.device)
+        gen = torch.nn.DataParallel(gen, config.gpu_ids, output_device=config.device)
+
+    return gen

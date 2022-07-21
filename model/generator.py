@@ -7,7 +7,7 @@ from model.style_transform_block import StyleTransformBlock
 from model.spade_norm import SPADENorm
 
 
-class PSFRGenerator(nn.Module):
+class Generator(nn.Module):
     def __init__(
             self,
             out_channel,

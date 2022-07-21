@@ -10,6 +10,11 @@ class NormTypeEnum(Enum):
     SPADE = 6
 
 
+class GenDisNormTypeEnum(Enum):
+    SPECTRAL = 1,
+    WEIGHT = 2
+
+
 class ReluTypeEnum(Enum):
     RELU = 1,
     LEAKY_RELU = 2,

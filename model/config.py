@@ -49,3 +49,11 @@ class Config:
     @property
     def fpn_pretrained_weight_file(self):
         return self.config['fpn_pretrained_weight_file']
+
+    @property
+    def generator_out_size(self):
+        return self.config['generator_out_size']
+
+    @property
+    def generator_norm(self):
+        return self.config['generator_norm']

@@ -6,7 +6,7 @@ from model.conv_layer import ConvLayer
 from model.residual_block import ResidualBlock
 
 
-class FPNModel(nn.Module):
+class FPN(nn.Module):
     def __init__(
             self,
             in_size=128,
