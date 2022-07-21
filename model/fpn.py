@@ -28,18 +28,16 @@ class FPN(nn.Module):
         down_steps = int(np.log2(in_size // min_feat_size))
         up_steps = int(np.log2(out_size // min_feat_size))
 
-        self.encoders = []
-        self.encoders.append(
-            ConvLayer(
-                in_channel=3,
-                out_channel=base_channel
-            )
-        )
+        encoders = [ConvLayer(
+            in_channel=3,
+            out_channel=base_channel
+        )]
+
         head_channel = base_channel
 
         for i in range(down_steps):
             in_channel, out_channel = clip_channel_function(head_channel), clip_channel_function(head_channel * 2)
-            self.encoders.append(
+            encoders.append(
                 ResidualBlock(
                     in_channel=in_channel,
                     out_channel=out_channel,
@@ -50,10 +48,10 @@ class FPN(nn.Module):
             )
             head_channel = head_channel * 2
 
-        self.bodies = []
+        bodies = []
 
         for i in range(residual_depth):
-            self.bodies.append(
+            bodies.append(
                 ResidualBlock(
                     in_channel=clip_channel_function(head_channel),
                     out_channel=clip_channel_function(head_channel),
@@ -62,11 +60,11 @@ class FPN(nn.Module):
                 )
             )
 
-        self.decoders = []
+        decoders = []
 
         for i in range(up_steps):
             in_channel, out_channel = clip_channel_function(head_channel), clip_channel_function(head_channel // 2)
-            self.decoders.append(
+            decoders.append(
                 ResidualBlock(
                     in_channel=in_channel,
                     out_channel=out_channel,

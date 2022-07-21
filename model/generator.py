@@ -74,8 +74,8 @@ class Generator(nn.Module):
             padding=1
         )
 
-        self.heads = nn.Sequential(*heads)
-        self.bodies = nn.Sequential(*bodies)
+        self.head = nn.Sequential(*heads)
+        self.body = nn.Sequential(*bodies)
         self.upsample = nn.Upsample(scale_factor=2)
 
     def forward_spade_layer(self, layer, inp, reference_inp):
@@ -99,9 +99,9 @@ class Generator(nn.Module):
         const_input = self.const_input.repeat(batch_size, 1, 1, 1)
         reference_input = torch.cat((inp, mask), dim=1)
 
-        feat = self.forward_spade(self.heads, const_input, reference_input)
+        feat = self.forward_spade(self.head, const_input, reference_input)
 
-        for idx, layer in enumerate(self.bodies):
+        for idx, layer in enumerate(self.body):
             feat = self.forward_spade(layer, feat, reference_input)
 
         outp = self.conv_out(feat)
