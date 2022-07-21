@@ -25,3 +25,15 @@ class Config:
     @property
     def data_base_path(self):
         return self.config['data_base_path']
+
+    @property
+    def dataset_name(self):
+        return self.config['dataset_name']
+
+    @property
+    def is_shuffled(self):
+        return self.config['is_shuffled']
+
+    @property
+    def num_threads(self):
+        return self.config['num_threads']

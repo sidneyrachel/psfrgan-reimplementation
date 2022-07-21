@@ -13,7 +13,6 @@ class FFHQDataset(Dataset):
     def __init__(self, config):
         self.low_res_size = config.low_res_size
         self.high_res_size = config.high_res_size
-        self.is_shuffle = config.is_train
         self.max_data_count = config.max_data_count
         self.data_base_path = config.data_base_path
 
