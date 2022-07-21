@@ -6,7 +6,8 @@ class NormTypeEnum(Enum):
     IN = 2,
     GN = 3,
     PIXEL = 4,
-    LAYER = 5
+    LAYER = 5,
+    SPADE = 6
 
 
 class ReluTypeEnum(Enum):

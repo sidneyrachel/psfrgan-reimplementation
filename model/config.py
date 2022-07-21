@@ -37,3 +37,15 @@ class Config:
     @property
     def num_threads(self):
         return self.config['num_threads']
+
+    @property
+    def p_norm_type(self):
+        return self.config['p_norm_type']
+
+    @property
+    def num_gpus(self):
+        return self.config['num_gpus']
+
+    @property
+    def fpn_pretrained_weight_file(self):
+        return self.config['fpn_pretrained_weight_file']
