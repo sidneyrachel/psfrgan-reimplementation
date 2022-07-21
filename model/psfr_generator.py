@@ -3,6 +3,8 @@ from torch import nn
 import numpy as np
 
 from variable.model import ReluTypeEnum, NormTypeEnum
+from model.style_transform_block import StyleTransformBlock
+from model.spade_norm import SPADENorm
 
 
 class PSFRGenerator(nn.Module):
@@ -35,51 +37,73 @@ class PSFRGenerator(nn.Module):
         ref_channel = 19 + 3
 
         head_channel = get_channel(min_feat_size)
-        head = [
-            nn.Conv2d(head_ch, head_ch, kernel_size=3, padding=1),
-            SPADEResBlock(head_ch, head_ch, ref_ch, relu_type, norm_type),
+        heads = [
+            nn.Conv2d(head_channel, head_channel, kernel_size=3, padding=1),
+            StyleTransformBlock(
+                in_channel=head_channel,
+                out_channel=head_channel,
+                ref_channel=ref_channel,
+                relu_type=relu_type,
+                norm_type=norm_type
+            )
         ]
 
-        body = []
-        for i in range(up_steps):
-            cin, cout = ch_clip(head_ch), ch_clip(head_ch // 2)
-            body += [
+        bodies = []
+
+        for idx in range(up_steps):
+            in_channel, out_channel = clip_channel_function(head_channel), clip_channel_function(head_channel // 2)
+            bodies.append(
                 nn.Sequential(
                     nn.Upsample(scale_factor=2),
-                    nn.Conv2d(cin, cout, kernel_size=3, padding=1),
-                    SPADEResBlock(cout, cout, ref_ch, relu_type, norm_type)
+                    nn.Conv2d(in_channel, out_channel, kernel_size=3, padding=1),
+                    StyleTransformBlock(
+                        in_channel=in_channel,
+                        out_channel=out_channel,
+                        ref_channel=ref_channel,
+                        relu_type=relu_type,
+                        norm_type=norm_type
+                    )
                 )
-            ]
-            head_ch = head_ch // 2
+            )
+            head_channel = head_channel // 2
 
-        self.img_out = nn.Conv2d(ch_clip(head_ch), output_nc, kernel_size=3, padding=1)
+        self.conv_out = nn.Conv2d(
+            clip_channel_function(head_channel),
+            out_channel,
+            kernel_size=3,
+            padding=1
+        )
 
-        self.head = nn.Sequential(*head)
-        self.body = nn.Sequential(*body)
+        self.heads = nn.Sequential(*heads)
+        self.bodies = nn.Sequential(*bodies)
         self.upsample = nn.Upsample(scale_factor=2)
 
-    def forward_spade(self, net, x, ref):
-        for m in net:
-            x = self.forward_spade_m(m, x, ref)
-        return x
-
-    def forward_spade_m(self, m, x, ref):
-        if isinstance(m, SPADENorm) or isinstance(m, SPADEResBlock):
-            x = m(x, ref)
+    def forward_spade_layer(self, layer, inp, reference_inp):
+        if isinstance(layer, SPADENorm) or isinstance(layer, StyleTransformBlock):
+            outp = layer(inp, reference_inp)
         else:
-            x = m(x)
-        return x
+            outp = layer(inp)
 
-    def forward(self, x, ref):
-        b, c, h, w = x.shape
-        const_input = self.const_input.repeat(b, 1, 1, 1)
-        ref_input = torch.cat((x, ref), dim=1)
+        return outp
 
-        feat = self.forward_spade(self.head, const_input, ref_input)
+    def forward_spade(self, layers, inp, reference_inp):
+        outp = inp
 
-        for idx, m in enumerate(self.body):
-            feat = self.forward_spade(m, feat, ref_input)
+        for layer in layers:
+            outp = self.forward_spade_layer(layer, outp, reference_inp)
 
-        out_img = self.img_out(feat)
+        return outp
 
-        return out_img
+    def forward(self, inp, mask):
+        batch_size, num_channel, height, weight = inp.shape
+        const_input = self.const_input.repeat(batch_size, 1, 1, 1)
+        reference_input = torch.cat((inp, mask), dim=1)
+
+        feat = self.forward_spade(self.heads, const_input, reference_input)
+
+        for idx, layer in enumerate(self.bodies):
+            feat = self.forward_spade(layer, feat, reference_input)
+
+        outp = self.conv_out(feat)
+
+        return outp
