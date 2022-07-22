@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 
-from variable.model import ReluTypeEnum, GenDisNormTypeEnum, InitWeightType
+from variable.model import ReluTypeEnum, GenDisNormTypeEnum, InitWeightTypeEnum
 from model.fpn import FPN
 from model.generator import Generator
 from model.multi_scale_discriminator import MultiScaleDiscriminator
@@ -10,19 +10,19 @@ from model.multi_scale_discriminator import MultiScaleDiscriminator
 def init_weights(
         network,
         # Normal is used in pix2pix and CycleGAN paper but xavier and kaiming work better for some applications.
-        init_type=InitWeightType.NORMAL,
+        init_type=InitWeightTypeEnum.NORMAL,
         init_gain=0.02
 ):
     def init_function(layer):
         classname = layer.__class__.__name__
         if hasattr(layer, 'weight') and (classname.find('Conv') != -1 or classname.find('Linear') != -1):
-            if init_type == InitWeightType.NORMAL:
+            if init_type == InitWeightTypeEnum.NORMAL:
                 nn.init.normal_(layer.weight.data, 0.0, init_gain)
-            elif init_type == InitWeightType.XAVIER:
+            elif init_type == InitWeightTypeEnum.XAVIER:
                 nn.init.xavier_normal_(layer.weight.data, gain=init_gain)
-            elif init_type == InitWeightType.KAIMING:
+            elif init_type == InitWeightTypeEnum.KAIMING:
                 nn.init.kaiming_normal_(layer.weight.data, a=0, mode='fan_in')
-            elif init_type == InitWeightType.ORTHOGONAL:
+            elif init_type == InitWeightTypeEnum.ORTHOGONAL:
                 nn.init.orthogonal_(layer.weight.data, gain=init_gain)
             else:
                 raise Exception(f'Init type is unknown. Init type: {init_type}.')
@@ -34,7 +34,7 @@ def init_weights(
             nn.init.normal_(layer.weight.data, 1.0, init_gain)
             nn.init.constant_(layer.bias.data, 0.0)
 
-    print(f'Initialize network with InitWeightType: {init_type}.')
+    print(f'Initialize network with InitWeightTypeEnum: {init_type}.')
     network.apply(init_function)
 
 
@@ -133,7 +133,7 @@ def build_discriminator(
 
     init_weights(
         network=disc,
-        init_type=InitWeightType.NORMAL,
+        init_type=InitWeightTypeEnum.NORMAL,
         init_gain=0.02
     )
 
