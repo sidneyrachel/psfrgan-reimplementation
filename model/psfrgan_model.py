@@ -204,15 +204,15 @@ class PSFRGANModel(BaseModel):
         self.discriminator_optimizer.step()
 
     def get_current_visual_images(self, size=512):
-        numpy_images = []
-        visual_images = []
-
-        numpy_images.append(tensor_to_numpy(self.low_res_image))
-        numpy_images.append(tensor_to_numpy(self.super_res_image))
-        numpy_images.append(tensor_to_numpy(self.high_res_image))
+        numpy_images = [
+            tensor_to_numpy(self.low_res_image),
+            tensor_to_numpy(self.super_res_image),
+            tensor_to_numpy(self.high_res_image)
+        ]
 
         out_images = [batch_numpy_to_image(numpy_image, size) for numpy_image in numpy_images]
 
+        visual_images = []
         visual_images += out_images
         visual_images.append(colorize_mask(self.one_hot_low_res_mask, size))
         visual_images.append(colorize_mask(self.high_res_mask, size))

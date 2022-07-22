@@ -2,6 +2,7 @@ import torch
 
 from model.base_model import BaseModel
 from model.util import build_fpn
+from util.common import tensor_to_numpy, colorize_mask, batch_numpy_to_image
 
 
 class FPNModel(BaseModel):
@@ -55,23 +56,25 @@ class FPNModel(BaseModel):
         loss.backward()
 
     def optimize_parameters(self):
-        self.optimizer.zero_grad()  # clear network G's existing gradients
-        self.backward()  # calculate gradients for network G
+        self.optimizer.zero_grad()  # Clear existing gradients
+        self.backward()  # Calculate gradients
         self.optimizer.step()
 
-    def get_current_visuals(self, size=512):
-        out = []
-        visual_imgs = []
-        out.append(utils.tensor_to_numpy(self.img_LR))
-        out.append(utils.tensor_to_numpy(self.img_SR))
-        out.append(utils.tensor_to_numpy(self.img_HR))
-        out_imgs = [utils.batch_numpy_to_image(x, size) for x in out]
+    def get_current_visual_images(self, size=512):
+        numpy_images = [
+            tensor_to_numpy(self.low_res_image),
+            tensor_to_numpy(self.super_res_image),
+            tensor_to_numpy(self.high_res_image)
+        ]
 
-        visual_imgs.append(out_imgs[0])
-        visual_imgs.append(out_imgs[1])
-        visual_imgs.append(utils.color_parse_map(self.pred_Parse))
-        visual_imgs.append(utils.color_parse_map(self.gt_Parse.unsqueeze(1)))
-        visual_imgs.append(out_imgs[2])
+        out_images = [batch_numpy_to_image(numpy_image, size) for numpy_image in numpy_images]
 
-        return visual_imgs
+        visual_images = [
+            out_images[0],
+            out_images[1],
+            colorize_mask(self.predicted_mask),
+            colorize_mask(self.ground_truth_mask.unsqueeze(1)),
+            out_images[2]
+        ]
 
+        return visual_images
