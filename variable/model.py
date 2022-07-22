@@ -83,3 +83,9 @@ class LearningRatePolicyEnum(Enum):
 class MainModelNameEnum(Enum):
     PSFRGAN = 'psfrgan',
     FPN = 'fpn'
+
+
+class PhaseEnum(Enum):
+    TRAIN = 'train',
+    TEST = 'test',
+    VAL = 'val'

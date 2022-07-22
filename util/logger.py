@@ -6,6 +6,7 @@ from tensorboardX import SummaryWriter
 import numpy as np
 
 from util.common import make_directories
+from variable.model import PhaseEnum
 
 
 class Logger():
@@ -13,7 +14,7 @@ class Logger():
         timestamp = '{}'.format(datetime.now().strftime('%Y-%m-%d_%H:%M'))
         self.config = config
         self.log_directory = os.path.join(config.log_directory, f'{config.experiment_name}_{timestamp}')
-        self.phase_keys = ['train', 'val', 'test']
+        self.phase_keys = [PhaseEnum.TRAIN, PhaseEnum.VAL, PhaseEnum.TEST]
         self.iteration_log = []
         self.set_phase(config.phase)
 
@@ -74,7 +75,7 @@ class Logger():
         self.writer.add_text(tag, text)
 
     def print_iter_summary(self, epoch, current_iter, total_iter, timer):
-        msg = '{}\nIter: [{}]{:03d}/{:03d}\t\t'.format(
+        message = '{}\nIter: [{}]{:03d}/{:03d}\t\t'.format(
             timer.to_string(total_iter - current_iter),
             epoch,
             current_iter,
@@ -82,12 +83,12 @@ class Logger():
         )
 
         for key, value in self.iteration_log[-1].items():
-            msg += '{}: {:.6f}\t'.format(key, value)
+            message += '{}: {:.6f}\t'.format(key, value)
 
-        print(f'{msg}\n')
+        print(f'{message}\n')
 
         with open(self.text_files[self.phase], 'a+') as f:
-            f.write(f'{msg}\n')
+            f.write(f'{message}\n')
 
     def close(self):
         self.writer.export_scalars_to_json(os.path.join(self.log_directory, 'all_scalars.json'))
