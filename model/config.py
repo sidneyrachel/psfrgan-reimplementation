@@ -73,3 +73,7 @@ class Config:
     @property
     def num_discriminator(self):
         return self.config['num_discriminator']
+
+    @property
+    def discriminator_in_channel(self):
+        return self.config['discriminator_in_channel']

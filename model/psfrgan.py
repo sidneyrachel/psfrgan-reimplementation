@@ -1,4 +1,4 @@
-from model.util import build_fpn, build_generator
+from model.util import build_fpn, build_generator, build_discriminator
 from variable.model import GenDisNormTypeEnum
 
 
@@ -16,7 +16,12 @@ class PSFRGAN(BaseModel):
         )
 
         if self.is_train:
-            self.netD = networks.define_D(opt, opt.Dinput_nc, use_norm='spectral_norm')
+            self.disc_model = build_discriminator(
+                config=config,
+                in_channel=config.discriminator_in_channel,
+                weight_norm_type=GenDisNormTypeEnum.SPECTRAL
+            )
+
             self.vgg_model = loss.PCPFeat(weight_path='./pretrain_models/vgg19-dcbb9e9d.pth').to(opt.device)
             if len(opt.gpu_ids) > 0:
                 self.vgg_model = torch.nn.DataParallel(self.vgg_model, opt.gpu_ids, output_device=opt.device)
