@@ -2,6 +2,7 @@ from dataset.util import create_dataset
 from model.util import create_model
 from util.logger import Logger
 from util.timer import Timer
+from util.config import Config
 
 
 def train(config):
@@ -22,7 +23,10 @@ def train(config):
     print(f'Start training. Epoch: {config.resume_epoch}. Iteration: {resume_iteration}.')
 
     for current_epoch in range(config.resume_epoch, config.num_epoch + 1):
-        for current_epoch_iteration, data in enumerate(dataset, start=start_iteration):
+        for current_epoch_iteration, data in enumerate(dataset):
+            if current_epoch_iteration < start_iteration:
+                continue
+
             current_iteration += 1
             logger.set_current_iteration(current_iteration)
 
@@ -75,6 +79,15 @@ def train(config):
             if config.is_debug:
                 break
 
+        print(f'Saving current model at the end of epoch. Epoch: {current_epoch}. Iteration: {current_iteration}.')
+        save_prefix = f'epoch_{current_epoch}'
+        info = {
+            'resume_epoch': current_epoch + 1,
+            'resume_iter_on_top_resume_epoch': 0
+        }
+
+        model.save_networks(save_prefix, info)
+
         if config.is_debug and current_epoch >= 0:
             break
 
@@ -82,4 +95,8 @@ def train(config):
 
 
 if __name__ == '__main__':
+    config = Config(
+        filename='config/psfrgan/train.json'
+    )
+
     train(config)

@@ -1,0 +1,12 @@
+{
+  "low_res_size": 512,
+  "high_res_size": 512,
+  "vgg_pretrained_weight_file": "./pretrain_models/vgg19-dcbb9e9d.pth",
+  "max_data_count": 1000000000,
+  "data_base_path": "../datasets/FFHQ",
+  "dataset_name": "ffhq",
+  "main_model_name": "psfrgan",
+  "is_shuffled": false,
+  "num_thread": 8,
+  ""
+}
