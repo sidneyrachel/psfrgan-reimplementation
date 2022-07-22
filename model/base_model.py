@@ -141,7 +141,7 @@ class BaseModel(ABC):
 
                 state_dict = torch.load(model_path, map_location=str(self.device))
 
-                if not self.config.no_strict_load:
+                if self.config.is_strict_load:
                     network.load_state_dict(state_dict)
                 else:  # Load partial weights
                     model_dict = network.state_dict()

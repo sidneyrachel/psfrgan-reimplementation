@@ -179,6 +179,7 @@ class Config:
         return self.config['load_epoch']
 
     @property
-    def no_strict_load(self):
-        return self.config['no_strict_load']
+    def is_strict_load(self):
+        return self.config['is_strict_load']
+
     # gpu_ids
