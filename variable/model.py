@@ -2,34 +2,68 @@ from enum import Enum
 
 
 class NormTypeEnum(Enum):
-    BN = 1,
-    IN = 2,
-    GN = 3,
-    PIXEL = 4,
-    LAYER = 5,
-    SPADE = 6
+    BN = 'bn',
+    IN = 'in',
+    GN = 'gn',
+    PIXEL = 'pixel',
+    LAYER = 'layer',
+    SPADE = 'spade'
 
 
 class GenDisNormTypeEnum(Enum):
-    SPECTRAL = 1,
-    WEIGHT = 2
+    SPECTRAL = 'spectral',
+    WEIGHT = 'weight'
 
 
 class ReluTypeEnum(Enum):
-    RELU = 1,
-    LEAKY_RELU = 2,
-    PRELU = 3,
-    SELU = 4
+    RELU = 'relu',
+    LEAKY_RELU = 'leaky_relu',
+    PRELU = 'prelu',
+    SELU = 'selu'
 
 
 class ScaleTypeEnum(Enum):
-    UP = 1,
-    DOWN = 2,
-    DOWN_AVG = 3
+    UP = 'up',
+    DOWN = 'down',
+    DOWN_AVG = 'down_avg'
 
 
-class InitWeightType(Enum):
-    NORMAL = 1,
-    XAVIER = 2,
-    KAIMING = 3,
-    ORTHOGONAL = 4,
+class InitWeightTypeEnum(Enum):
+    NORMAL = 'normal',
+    XAVIER = 'xavier',
+    KAIMING = 'kaiming',
+    ORTHOGONAL = 'orthogonal'
+
+
+class GANModeEnum(Enum):
+    LSGAN = 'lsgan',
+    VANILLA = 'vanilla',
+    HINGE = 'hinge',
+    WGANGP = 'wgangp'
+
+
+class PerceptualLossBaseModelEnum(Enum):
+    VGG_19 = 'vgg_19',
+    RESNET_50 = 'resnet_50'
+
+
+class ModelNameEnum(Enum):
+    GENERATOR = 'generator',
+    DISCRIMINATOR = 'discriminator'
+
+
+class LossNameEnum(Enum):
+    PIX = 'pix',
+    PERCEPTUAL = 'perceptual',
+    GENERATOR = 'generator',
+    FEATURE_MATCHING = 'feature_matching',
+    DISCRIMINATOR = 'discriminator',
+    SEMANTIC_STYLE = 'semantic_style'
+
+
+class VisualNameEnum(Enum):
+    LOW_RES_IMAGE = 'low_res_image',
+    HIGH_RES_IMAGE = 'high_res_image',
+    SUPER_RES_IMAGE = 'super_res_image'
+    LOW_RES_MASK = 'low_res_mask'
+    HIGH_RES_MASK = 'high_res_mask'

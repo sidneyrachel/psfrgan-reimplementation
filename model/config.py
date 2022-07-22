@@ -51,6 +51,10 @@ class Config:
         return self.config['fpn_pretrained_weight_file']
 
     @property
+    def psfr_pretrained_weight_file(self):
+        return self.config['psfr_pretrained_weight_file']
+
+    @property
     def generator_out_size(self):
         return self.config['generator_out_size']
 
@@ -77,3 +81,47 @@ class Config:
     @property
     def discriminator_in_channel(self):
         return self.config['discriminator_in_channel']
+
+    @property
+    def vgg_pretrained_weight_file(self):
+        return self.config['vgg_pretrained_weight_file']
+
+    @property
+    def gan_mode(self):
+        return self.config['gan_mode']
+
+    @property
+    def generator_learning_rate(self):
+        return self.config['generator_learning_rate']
+
+    @property
+    def discriminator_learning_rate(self):
+        return self.config['discriminator_learning_rate']
+
+    @property
+    def beta1(self):
+        return self.config['beta1']
+
+    @property
+    def debug(self):
+        return self.config['debug']
+
+    @property
+    def pix_lambda(self):
+        return self.config['pix_lambda']
+
+    @property
+    def ss_lambda(self):
+        return self.config['ss_lambda']
+
+    @property
+    def perceptual_lambda(self):
+        return self.config['perceptual_lambda']
+
+    @property
+    def fm_lambda(self):
+        return self.config['fm_lambda']
+
+    @property
+    def gen_lambda(self):
+        return self.config['gen_lambda']

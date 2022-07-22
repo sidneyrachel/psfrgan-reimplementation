@@ -21,7 +21,7 @@ class NLayerDiscriminator(nn.Module):
         models = [ConvLayer(
             in_channel=in_channel,
             out_channel=base_channel,
-            norm_type=None,  # Check if this is true
+            norm_type=None,  # TODO: Check if this is true
             relu_type=relu_type
         )]
 
