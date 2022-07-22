@@ -78,3 +78,8 @@ class LearningRatePolicyEnum(Enum):
     STEP = 'step',
     PLATEAU = 'plateau',
     COSINE = 'cosine'
+
+
+class MainModelNameEnum(Enum):
+    PSFRGAN = 'psfrgan',
+    FPN = 'fpn'

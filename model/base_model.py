@@ -23,7 +23,7 @@ class BaseModel(ABC):
         self.config = config
         self.gpu_ids = config.gpu_ids
         self.is_train = config.is_train
-        self.checkpoint_directory = os.path.join(config.checkpoint_directory_path, config.experiment_code)
+        self.checkpoint_directory = os.path.join(config.checkpoint_directory_path, config.experiment_name)
         self.device = torch.device(f'cuda:{self.gpu_ids[0]}') if self.gpu_ids \
             else torch.device('cpu')
 

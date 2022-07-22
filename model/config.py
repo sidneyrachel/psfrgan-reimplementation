@@ -31,12 +31,20 @@ class Config:
         return self.config['dataset_name']
 
     @property
+    def main_model_name(self):
+        return self.config['main_model_name']
+
+    @property
     def is_shuffled(self):
         return self.config['is_shuffled']
 
     @property
     def num_thread(self):
         return self.config['num_thread']
+
+    @property
+    def phase(self):
+        return self.config['phase']
 
     @property
     def p_norm_type(self):
@@ -143,8 +151,8 @@ class Config:
         return self.config['checkpoint_directory_path']
 
     @property
-    def experiment_code(self):
-        return self.config['experiment_code']
+    def experiment_name(self):
+        return self.config['experiment_name']
 
     @property
     def num_epoch(self):
@@ -181,5 +189,13 @@ class Config:
     @property
     def is_strict_load(self):
         return self.config['is_strict_load']
+
+    @property
+    def log_directory(self):
+        return self.config['log_directory']
+
+    @property
+    def log_archive_directory(self):
+        return self.config['log_archive_directory']
 
     # gpu_ids

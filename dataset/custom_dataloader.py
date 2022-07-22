@@ -1,4 +1,3 @@
-import torch
 from torch.utils.data import DataLoader
 
 from variable.dataset import DatasetNameEnum
@@ -18,7 +17,7 @@ class CustomDataLoader:
             self.dataset,
             batch_size=config.batch_size,
             shuffle=config.is_shuffled,
-            num_worker=int(config.num_thread),
+            num_workers=int(config.num_thread),
             drop_last=drop_last
         )
 

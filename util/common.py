@@ -1,5 +1,7 @@
 import numpy as np
 import cv2
+import os
+
 
 from variable.mask import MASK_COLORMAP
 
@@ -50,3 +52,13 @@ def colorize_mask(tensor, size=None):
         color_masks.append(color_mask.astype(np.uint8))
 
     return color_masks
+
+
+def make_directories(directories):
+    if isinstance(directories, list) and not isinstance(directories, str):
+        for directory in directories:
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+    else:
+        if not os.path.exists(directories):
+            os.makedirs(directories)
