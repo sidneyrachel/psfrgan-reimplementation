@@ -3,15 +3,22 @@ import torch
 from model.base_model import BaseModel
 from model.util import build_fpn
 from util.common import tensor_to_numpy, colorize_mask, batch_numpy_to_image
+from variable.model import GenDisNormTypeEnum, ModelNameEnum, LossNameEnum, VisualNameEnum
 
 
 class FPNModel(BaseModel):
     def __init__(self, config):
         BaseModel.__init__(self, config)
-        # TODO: Rename these later
-        self.loss_names = ['P', 'SR']
-        self.visual_names = ['img_LR', 'img_HR', 'gt_Parse', 'img_SR', 'pred_Parse']
-        self.model_names = ['P']
+
+        self.loss_names = [LossNameEnum.FPN, LossNameEnum.PIX]
+        self.visual_names = [
+            VisualNameEnum.LOW_RES_IMAGE,
+            VisualNameEnum.SUPER_RES_IMAGE,
+            VisualNameEnum.PREDICTED_MASK,
+            VisualNameEnum.GROUND_TRUTH_MASK,
+            VisualNameEnum.HIGH_RES_IMAGE
+        ]
+        self.model_names = [ModelNameEnum.FPN]
         self.fpn_model = build_fpn(config)
 
         if self.is_train:
