@@ -125,3 +125,15 @@ class Config:
     @property
     def gen_lambda(self):
         return self.config['gen_lambda']
+
+    @property
+    def fpn_lambda(self):
+        return self.config['fpn_lambda']
+
+    @property
+    def fpn_pix_lambda(self):
+        return self.config['fpn_pix_lambda']
+
+    @property
+    def fpn_learning_rate(self):
+        return self.config['fpn_learning_rate']

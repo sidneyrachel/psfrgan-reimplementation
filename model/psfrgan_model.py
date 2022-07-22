@@ -9,10 +9,10 @@ from gan_loss import GANLoss
 from perceptual_loss import PerceptualLoss
 from region_style_loss import RegionStyleLoss
 from util.common import tensor_to_numpy, batch_numpy_to_image, colorize_mask
+from model.base_model import BaseModel
 
 
-# TODO: Implement BaseModel later
-class PSFRGAN(BaseModel):
+class PSFRGANModel(BaseModel):
     def __init__(self, config):
         BaseModel.__init__(self, config)
 
@@ -59,7 +59,6 @@ class PSFRGAN(BaseModel):
             self.model_names = [ModelNameEnum.GENERATOR, ModelNameEnum.DISCRIMINATOR]
             self.load_model_names = [ModelNameEnum.GENERATOR, ModelNameEnum.DISCRIMINATOR]
 
-            self.fpn_criterion = nn.CrossEntropyLoss().to(config.device)
             self.fm_criterion = FMLoss().to(config.device)
             self.gan_criterion = GANLoss(config.gan_mode).to(config.device)
             self.perceptual_criterion = PerceptualLoss()
@@ -108,7 +107,7 @@ class PSFRGAN(BaseModel):
         self.high_res_mask = inp['mask'].to(self.config.device)
 
         if self.config.debug:
-            print(f'Low res image shape: {self.low_res_image.shape}. '
+            print(f'[PSFRGAN] Low res image shape: {self.low_res_image.shape}. '
                   f'High res image shape: {self.high_res_image.shape}.')
 
     def forward(self):
@@ -117,7 +116,7 @@ class PSFRGAN(BaseModel):
             self.one_hot_low_res_mask = (low_res_mask == low_res_mask.max(dim=1, keepdim=True)[0]).float().detach()
 
         if self.config.debug:
-            print(f'Low res mask shape: {self.one_hot_low_res_mask.shape}.')
+            print(f'[PSFRGAN] Low res mask shape: {self.one_hot_low_res_mask.shape}.')
 
         self.super_res_image = self.gen_model(self.low_res_image, self.one_hot_low_res_mask)
 
