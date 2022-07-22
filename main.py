@@ -1,16 +1,13 @@
-# This is a sample Python script.
-
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+from variable.config import init_config
+from variable import config as cfg_holder
+from dataset.util import make_dataset
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    init_config('config/test.json')
+    print(cfg_holder.config.mask_size)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    a = make_dataset('sample/imgs1024', filename_set=set())
+    b = make_dataset('sample/masks512')
+    print(a)
+    print(b)

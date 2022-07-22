@@ -37,7 +37,7 @@ class FPNModel(BaseModel):
         self.high_res_image = inp['hr'].to(self.config.device)
         self.ground_truth_mask = inp['mask'].to(self.config.device)
 
-        if self.config.debug:
+        if self.config.is_debug:
             print(f'[FPN] Low res image shape: {self.low_res_image.shape}. '
                   f'High res image shape: {self.high_res_image.shape}. '
                   f'Ground truth mask shape: {self.ground_truth_mask.shape}.')
@@ -52,7 +52,7 @@ class FPNModel(BaseModel):
     def forward(self):
         self.predicted_mask, self.super_res_image = self.fpn_model(self.low_res_image)
 
-        if self.config.debug:
+        if self.config.is_debug:
             print(f'[FPN] Predicted mask shape: {self.predicted_mask.shape}. '
                   f'Super res image shape: {self.super_res_image.shape}.')
 

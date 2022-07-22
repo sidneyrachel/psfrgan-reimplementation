@@ -1,0 +1,5 @@
+{
+  "low_res_size": 512,
+  "high_res_size": 512,
+  "vgg_pretrained_weight_file": "./pretrain_models/vgg19-dcbb9e9d.pth"
+}

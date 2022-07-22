@@ -15,7 +15,7 @@ class Logger():
         self.config = config
         self.log_directory = os.path.join(config.log_directory, f'{config.experiment_name}_{timestamp}')
         self.phase_keys = [PhaseEnum.TRAIN, PhaseEnum.VAL, PhaseEnum.TEST]
-        self.iteration_log = []
+        self.iteration_logs = []
         self.set_phase(config.phase)
 
         existing_log = None
@@ -43,19 +43,19 @@ class Logger():
     def set_phase(self, phase):
         self.phase = phase
 
-    def set_current_iter(self, current_iter):
-        self.current_iter = current_iter
+    def set_current_iteration(self, current_iteration):
+        self.current_iteration = current_iteration
 
     def record_losses(self, items):
-        self.iteration_log.append(items)
+        self.iteration_logs.append(items)
 
         for key, value in items.items():
             if 'loss' in key.lower():
-                self.writer.add_scalar(f'loss/{key}', value, self.current_iter)
+                self.writer.add_scalar(f'loss/{key}', value, self.current_iteration)
 
     def record_scalar(self, items):
         for key in items.keys():
-            self.writer.add_scalar(f'{key}', items[key], self.current_iter)
+            self.writer.add_scalar(f'{key}', items[key], self.current_iteration)
 
     def record_images(self, visual_images, num_row=6, tag='ckpt_image'):
         images = []
@@ -69,20 +69,26 @@ class Logger():
             images.append(np.hstack(tmp_images))
 
         images = np.vstack(images).astype(np.uint8)
-        self.writer.add_image(tag, images, self.current_iter, dataformats='HWC')
+        self.writer.add_image(tag, images, self.current_iteration, dataformats='HWC')
 
     def record_text(self, tag, text):
         self.writer.add_text(tag, text)
 
-    def print_iter_summary(self, epoch, current_iter, total_iter, timer):
+    def print_iteration_summary(
+            self,
+            epoch_progress_detail,
+            current_iteration,
+            total_iteration,
+            timer
+    ):
         message = '{}\nIter: [{}]{:03d}/{:03d}\t\t'.format(
-            timer.to_string(total_iter - current_iter),
-            epoch,
-            current_iter,
-            total_iter
+            timer.to_string(total_iteration - current_iteration),
+            epoch_progress_detail,
+            current_iteration,
+            total_iteration
         )
 
-        for key, value in self.iteration_log[-1].items():
+        for key, value in self.iteration_logs[-1].items():
             message += '{}: {:.6f}\t'.format(key, value)
 
         print(f'{message}\n')

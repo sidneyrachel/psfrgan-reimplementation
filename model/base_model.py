@@ -37,7 +37,7 @@ class BaseModel(ABC):
         self.metric = 0  # Used for learning rate policy 'plateau'.
 
     @abstractmethod
-    def set_input(self, inp):
+    def set_input(self, inp, current_iter):
         pass
 
     @abstractmethod
@@ -94,7 +94,7 @@ class BaseModel(ABC):
         learning_rate_map = {}
 
         for idx, optimizer in enumerate(self.optimizers):
-            learning_rate_map[f'lr_{idx}'] = optimizer.param_groups[0]['lr']
+            learning_rate_map[f'LR{idx}'] = optimizer.param_groups[0]['lr']
 
         return learning_rate_map
 

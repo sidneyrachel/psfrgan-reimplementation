@@ -111,8 +111,8 @@ class Config:
         return self.config['beta1']
 
     @property
-    def debug(self):
-        return self.config['debug']
+    def is_debug(self):
+        return self.config['is_debug']
 
     @property
     def pix_lambda(self):
@@ -198,4 +198,31 @@ class Config:
     def log_archive_directory(self):
         return self.config['log_archive_directory']
 
+    @property
+    def continue_train(self):
+        return self.config['continue_train']
+
+    @property
+    def batch_size(self):
+        return self.config['batch_size']
+
+    @property
+    def resume_iter_on_top_resume_epoch(self):
+        return self.config['resume_iter_on_top_resume_epoch']
+
+    @property
+    def resume_epoch(self):
+        return self.config['resume_epoch']
+
+    @property
+    def print_iteration_frequency(self):
+        return self.config['print_iteration_frequency']
+
+    @property
+    def visual_iteration_frequency(self):
+        return self.config['visual_iteration_frequency']
+
+    @property
+    def save_iteration_frequency(self):
+        return self.config['save_iteration_frequency']
     # gpu_ids

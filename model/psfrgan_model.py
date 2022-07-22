@@ -87,7 +87,7 @@ class PSFRGANModel(BaseModel):
         self.fpn_model.eval()
         print(f'Load pretrained LQ face parsing network from {self.config.fpn_pretrained_weight_file}.')
 
-        if len(self.opt.gpu_ids) > 0:
+        if len(self.config.gpu_ids) > 0:
             self.fpn_model.module.load_state_dict(torch.load(self.config.fpn_pretrained_weight_file))
         else:
             self.fpn_model.load_state_dict(torch.load(self.config.fpn_pretrained_weight_file))
@@ -95,7 +95,7 @@ class PSFRGANModel(BaseModel):
         self.gen_model.eval()
         print(f'Load pretrained PSFRGAN from {self.config.psfr_pretrained_weight_file}.')
 
-        if len(self.opt.gpu_ids) > 0:
+        if len(self.config.gpu_ids) > 0:
             self.gen_model.module.load_state_dict(torch.load(self.config.psfr_pretrained_weight_file), strict=False)
         else:
             self.gen_model.load_state_dict(torch.load(self.config.psfr_pretrained_weight_file), strict=False)
@@ -106,7 +106,7 @@ class PSFRGANModel(BaseModel):
         self.high_res_image = inp['hr'].to(self.config.device)
         self.high_res_mask = inp['mask'].to(self.config.device)
 
-        if self.config.debug:
+        if self.config.is_debug:
             print(f'[PSFRGAN] Low res image shape: {self.low_res_image.shape}. '
                   f'High res image shape: {self.high_res_image.shape}.')
 
@@ -115,7 +115,7 @@ class PSFRGANModel(BaseModel):
             low_res_mask, _ = self.fpn_model(self.low_res_image)
             self.one_hot_low_res_mask = (low_res_mask == low_res_mask.max(dim=1, keepdim=True)[0]).float().detach()
 
-        if self.config.debug:
+        if self.config.is_debug:
             print(f'[PSFRGAN] Low res mask shape: {self.one_hot_low_res_mask.shape}.')
 
         self.super_res_image = self.gen_model(self.low_res_image, self.one_hot_low_res_mask)
@@ -157,7 +157,7 @@ class PSFRGANModel(BaseModel):
         for i, weight in zip(range(self.config.num_discriminator), self.fm_weights):
             fm_loss += self.fm_criterion(self.fake_gen_results[i][1], self.real_disc_results[i][1]) * weight
 
-        self.fm_loss = fm_loss * self.opt.lambda_fm / self.config.num_discriminator
+        self.fm_loss = fm_loss * self.config.fm_lambda / self.config.num_discriminator
 
         gen_loss = 0
 
