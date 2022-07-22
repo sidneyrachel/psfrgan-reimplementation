@@ -11,17 +11,18 @@ class FPNModel(BaseModel):
         BaseModel.__init__(self, config)
 
         self.loss_names = [LossNameEnum.FPN, LossNameEnum.PIX]
-        self.visual_names = [
-            VisualNameEnum.LOW_RES_IMAGE,
-            VisualNameEnum.SUPER_RES_IMAGE,
-            VisualNameEnum.PREDICTED_MASK,
-            VisualNameEnum.GROUND_TRUTH_MASK,
-            VisualNameEnum.HIGH_RES_IMAGE
-        ]
+        # self.visual_names = [
+        #     VisualNameEnum.LOW_RES_IMAGE,
+        #     VisualNameEnum.SUPER_RES_IMAGE,
+        #     VisualNameEnum.PREDICTED_MASK,
+        #     VisualNameEnum.GROUND_TRUTH_MASK,
+        #     VisualNameEnum.HIGH_RES_IMAGE
+        # ]
         self.model_names = [ModelNameEnum.FPN]
         self.fpn_model = build_fpn(config)
 
         if self.is_train:
+            self.load_model_names = [ModelNameEnum.FPN]
             self.fpn_criterion = torch.nn.CrossEntropyLoss()
             self.pix_criterion = torch.nn.L1Loss()
             self.optimizer = torch.optim.Adam(

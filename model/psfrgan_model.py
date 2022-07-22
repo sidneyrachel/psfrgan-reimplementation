@@ -46,13 +46,13 @@ class PSFRGANModel(BaseModel):
             LossNameEnum.DISCRIMINATOR,
             LossNameEnum.SEMANTIC_STYLE
         ]
-        self.visual_names = [
-            VisualNameEnum.LOW_RES_IMAGE,
-            VisualNameEnum.SUPER_RES_IMAGE,
-            VisualNameEnum.HIGH_RES_IMAGE,
-            VisualNameEnum.LOW_RES_MASK,
-            VisualNameEnum.HIGH_RES_MASK
-        ]
+        # self.visual_names = [
+        #     VisualNameEnum.LOW_RES_IMAGE,
+        #     VisualNameEnum.SUPER_RES_IMAGE,
+        #     VisualNameEnum.HIGH_RES_IMAGE,
+        #     VisualNameEnum.LOW_RES_MASK,
+        #     VisualNameEnum.HIGH_RES_MASK
+        # ]
         self.fm_weights = [1**x for x in range(config.num_discriminator)]
 
         if self.is_train:

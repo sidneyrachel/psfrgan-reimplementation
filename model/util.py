@@ -1,7 +1,8 @@
 import torch
 from torch import nn
+from torch.optim import lr_scheduler
 
-from variable.model import ReluTypeEnum, GenDisNormTypeEnum, InitWeightTypeEnum
+from variable.model import ReluTypeEnum, GenDisNormTypeEnum, InitWeightTypeEnum, LearningRatePolicyEnum
 from model.fpn import FPN
 from model.generator import Generator
 from model.multi_scale_discriminator import MultiScaleDiscriminator
@@ -138,3 +139,45 @@ def build_discriminator(
     )
 
     return disc
+
+
+# For 'linear', we keep the same learning rate for the first <config.init_learning_rate_num_epoch> epochs
+# and linearly decay the rate to zero over the next <config.decay_next_num_epoch> epochs.
+# For other schedulers (step, plateau, and cosine), we use the default PyTorch schedulers.
+# See https://pytorch.org/docs/stable/optim.html for more details.
+def get_scheduler(optimizer, config):
+    if config.learning_rate_policy == LearningRatePolicyEnum.LINEAR:
+        def lambda_rule(epoch):
+            return 1.0 - max(
+                0,
+                epoch + config.start_epoch - config.init_learning_rate_num_epoch
+            ) / float(config.decay_next_num_epoch + 1)
+
+        scheduler = lr_scheduler.LambdaLR(
+            optimizer,
+            lr_lambda=lambda_rule
+        )
+    elif config.learning_rate_policy == LearningRatePolicyEnum.STEP:
+        scheduler = lr_scheduler.StepLR(
+            optimizer,
+            step_size=config.gamma_decay_iter,
+            gamma=0.1
+        )
+    elif config.learning_rate_policy == LearningRatePolicyEnum.PLATEAU:
+        scheduler = lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode='min',
+            factor=0.2,
+            threshold=0.01,
+            patience=5
+        )
+    elif config.learning_rate_policy == LearningRatePolicyEnum.COSINE:
+        scheduler = lr_scheduler.CosineAnnealingLR(
+            optimizer,
+            T_max=config.init_learning_rate_num_epoch,
+            eta_min=0
+        )
+    else:
+        raise Exception(f'Learning rate policy is not supported. Learning rate policy: {config.learning_rate_policy}.')
+
+    return scheduler

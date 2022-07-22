@@ -137,3 +137,48 @@ class Config:
     @property
     def fpn_learning_rate(self):
         return self.config['fpn_learning_rate']
+
+    @property
+    def checkpoint_directory_path(self):
+        return self.config['checkpoint_directory_path']
+
+    @property
+    def experiment_code(self):
+        return self.config['experiment_code']
+
+    @property
+    def num_epoch(self):
+        return self.config['num_epoch']
+
+    @property
+    def init_learning_rate_num_epoch(self):
+        return self.config['init_learning_rate_num_epoch']
+
+    @property
+    def start_epoch(self):
+        return self.config['start_epoch']
+
+    @property
+    def decay_next_num_epoch(self):
+        return self.config['decay_next_num_epoch']
+
+    @property
+    def gamma_decay_iter(self):
+        return self.config['gamma_decay_iter']
+
+    @property
+    def learning_rate_policy(self):
+        return self.config['learning_rate_policy']
+
+    @property
+    def load_iter(self):
+        return self.config['load_iter']
+
+    @property
+    def load_epoch(self):
+        return self.config['load_epoch']
+
+    @property
+    def no_strict_load(self):
+        return self.config['no_strict_load']
+    # gpu_ids
