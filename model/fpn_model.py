@@ -3,7 +3,7 @@ import torch
 from model.base_model import BaseModel
 from model.util import build_fpn
 from util.common import tensor_to_numpy, colorize_mask, batch_numpy_to_image
-from variable.model import GenDisNormTypeEnum, ModelNameEnum, LossNameEnum, VisualNameEnum
+from variable.model import ModelNameEnum, LossNameEnum, VisualNameEnum
 
 
 class FPNModel(BaseModel):
