@@ -26,3 +26,10 @@ class ScaleTypeEnum(Enum):
     UP = 1,
     DOWN = 2,
     DOWN_AVG = 3
+
+
+class InitWeightType(Enum):
+    NORMAL = 1,
+    XAVIER = 2,
+    KAIMING = 3,
+    ORTHOGONAL = 4,

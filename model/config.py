@@ -57,3 +57,19 @@ class Config:
     @property
     def generator_norm(self):
         return self.config['generator_norm']
+
+    @property
+    def num_discriminator_filter(self):
+        return self.config['num_discriminator_filter']
+
+    @property
+    def num_discriminator_layer(self):
+        return self.config['num_discriminator_layer']
+
+    @property
+    def discriminator_norm(self):
+        return self.config['discriminator_norm']
+
+    @property
+    def num_discriminator(self):
+        return self.config['num_discriminator']

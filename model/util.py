@@ -1,9 +1,41 @@
 import torch
 from torch import nn
 
-from variable.model import ReluTypeEnum, GenDisNormTypeEnum
+from variable.model import ReluTypeEnum, GenDisNormTypeEnum, InitWeightType
 from model.fpn import FPN
 from model.generator import Generator
+from model.multi_scale_discriminator import MultiScaleDiscriminator
+
+
+def init_weights(
+        network,
+        # Normal is used in pix2pix and CycleGAN paper but xavier and kaiming work better for some applications.
+        init_type=InitWeightType.NORMAL,
+        init_gain=0.02
+):
+    def init_function(layer):
+        classname = layer.__class__.__name__
+        if hasattr(layer, 'weight') and (classname.find('Conv') != -1 or classname.find('Linear') != -1):
+            if init_type == InitWeightType.NORMAL:
+                nn.init.normal_(layer.weight.data, 0.0, init_gain)
+            elif init_type == InitWeightType.XAVIER:
+                nn.init.xavier_normal_(layer.weight.data, gain=init_gain)
+            elif init_type == InitWeightType.KAIMING:
+                nn.init.kaiming_normal_(layer.weight.data, a=0, mode='fan_in')
+            elif init_type == InitWeightType.ORTHOGONAL:
+                nn.init.orthogonal_(layer.weight.data, gain=init_gain)
+            else:
+                raise Exception(f'Init type is unknown. Init type: {init_type}.')
+
+            if hasattr(layer, 'bias') and layer.bias is not None:
+                nn.init.constant_(layer.bias.data, 0.0)
+        # BatchNorm2d weight is not a matrix, only normal distribution can be applied.
+        elif classname.find('BatchNorm2d') != -1:
+            nn.init.normal_(layer.weight.data, 1.0, init_gain)
+            nn.init.constant_(layer.bias.data, 0.0)
+
+    print(f'Initialize network with InitWeightType: {init_type}.')
+    network.apply(init_function)
 
 
 def apply_norm(network, weight_norm_type):
@@ -73,3 +105,36 @@ def build_generator(
         gen = torch.nn.DataParallel(gen, config.gpu_ids, output_device=config.device)
 
     return gen
+
+
+def build_discriminator(
+        config,
+        in_channel=3,
+        is_train=True,
+        weight_norm_type=None
+):
+    disc = MultiScaleDiscriminator(
+        in_channel=in_channel,
+        base_channel=config.num_discriminator_filter,
+        num_layer=config.num_discriminator_layer,
+        norm_type=config.discriminator_norm,
+        num_discriminator=config.num_discriminator
+    )
+
+    apply_norm(disc, weight_norm_type)
+
+    if not is_train:
+        disc.eval()
+
+    if len(config.gpu_ids) > 0:
+        assert(torch.cuda.is_available())
+        disc.to(config.device)
+        disc = torch.nn.DataParallel(disc, config.gpu_ids, output_device=config.device)
+
+    init_weights(
+        network=disc,
+        init_type=InitWeightType.NORMAL,
+        init_gain=0.02
+    )
+
+    return disc
