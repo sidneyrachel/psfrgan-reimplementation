@@ -14,15 +14,15 @@ class FFHQDataset(Dataset):
         self.low_res_size = config.low_res_size
         self.high_res_size = config.high_res_size
         self.max_data_count = config.max_data_count
-        self.data_base_path = config.data_base_path
+        self.dataset_base_path = config.dataset_base_path
 
         self.image_paths, filename_set = make_dataset(
-            path=os.path.join(self.data_base_path, 'imgs1024'),
+            path=os.path.join(self.dataset_base_path, 'imgs1024'),
             max_data_count=self.max_data_count
         )
 
         self.mask_paths, _ = make_dataset(
-            path=os.path.join(self.data_base_path, 'masks512'),
+            path=os.path.join(self.dataset_base_path, 'masks512'),
             filename_set=filename_set
         )
 

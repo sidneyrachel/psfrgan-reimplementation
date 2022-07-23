@@ -1,0 +1,6 @@
+{
+  "is_train": false,
+  "phase": "test",
+  "fpn_pretrained_weight_file": "./pretrain_models/parse_multi_iter_90000.pth",
+  "psfr_pretrained_weight_file": ""
+}

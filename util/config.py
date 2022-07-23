@@ -2,9 +2,12 @@ import json
 
 
 class Config:
-    def __init__(self, filename):
+    def __init__(self, filename, base_filename='./config/base.json'):
+        base_config_file = open(base_filename)
+        base_config = json.load(base_config_file)
         config_file = open(filename)
-        self.config = json.load(config_file)
+        config = json.load(config_file)
+        self.config = base_config.update(config)
 
     @property
     def low_res_size(self):
@@ -23,14 +26,16 @@ class Config:
         return self.config['max_data_count']
 
     @property
-    def data_base_path(self):
-        return self.config['data_base_path']
+    def dataset_base_path(self):
+        return self.config['dataset_base_path']
 
     @property
+    # Enum: ffhq
     def dataset_name(self):
         return self.config['dataset_name']
 
     @property
+    # Enum: psfrgan, fpn
     def main_model_name(self):
         return self.config['main_model_name']
 
@@ -43,12 +48,14 @@ class Config:
         return self.config['num_thread']
 
     @property
+    # Enum: train, test, val
     def phase(self):
         return self.config['phase']
 
     @property
-    def p_norm_type(self):
-        return self.config['p_norm_type']
+    # Enum: in, bn, gn, pixel, spade, layer
+    def fpn_norm_type(self):
+        return self.config['fpn_norm_type']
 
     @property
     def num_gpu(self):
@@ -67,6 +74,7 @@ class Config:
         return self.config['generator_out_size']
 
     @property
+    # Enum: in, bn, gn, pixel, spade, layer
     def generator_norm(self):
         return self.config['generator_norm']
 
@@ -79,6 +87,7 @@ class Config:
         return self.config['num_discriminator_layer']
 
     @property
+    # Enum: in, bn, gn, pixel, spade, layer
     def discriminator_norm(self):
         return self.config['discriminator_norm']
 
@@ -96,6 +105,7 @@ class Config:
 
     @property
     def gan_mode(self):
+        # Enum: lsgan, vanilla, hinge, wgangp
         return self.config['gan_mode']
 
     @property
@@ -107,8 +117,9 @@ class Config:
         return self.config['discriminator_learning_rate']
 
     @property
-    def beta1(self):
-        return self.config['beta1']
+    # Momentum for adam optimizer
+    def gen_disc_beta1(self):
+        return self.config['gen_disc_beta1']
 
     @property
     def is_debug(self):
@@ -175,6 +186,7 @@ class Config:
         return self.config['gamma_decay_iter']
 
     @property
+    # Enum: linear, step, plateau, cosine
     def learning_rate_policy(self):
         return self.config['learning_rate_policy']
 
@@ -225,4 +237,3 @@ class Config:
     @property
     def save_iteration_frequency(self):
         return self.config['save_iteration_frequency']
-    # gpu_ids

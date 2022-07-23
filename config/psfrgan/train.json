@@ -1,5 +1,17 @@
 {
-  "low_res_size": 512,
-  "high_res_size": 512,
-  "vgg_pretrained_weight_file": "./pretrain_models/vgg19-dcbb9e9d.pth"
+  "is_train": true,
+  "max_data_count": 1000000000,
+  "phase": "train",
+  "dataset_base_path": "../datasets/FFHQ",
+  "main_model_name": "psfrgan",
+  "dataset_name": "ffhq",
+  "experiment_name": "psfrgan_1",
+  "num_epoch": 50,
+  "continue_train": false,
+  "load_iter": -1,
+  "load_epoch": -1,
+  "resume_iter_on_top_resume_epoch": 0,
+  "resume_epoch": 0,
+  "is_strict_load": true,
+  "batch_size": 2
 }

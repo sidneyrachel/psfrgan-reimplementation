@@ -69,7 +69,7 @@ def build_fpn(
         base_channel=64,
         parsing_channel=19,
         relu_type=relu_type,
-        norm_type=config.p_norm_type,
+        norm_type=config.fpn_norm_type,
         channel_range=[32, 256]
     )
 

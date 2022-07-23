@@ -70,12 +70,12 @@ class PSFRGANModel(BaseModel):
                     param for param in self.gen_model.parameters() if param.requires_grad
                 ],
                 lr=config.generator_learning_rate,
-                betas=(config.beta1, 0.999)
+                betas=(config.gen_disc_beta1, 0.999)
             )
             self.discriminator_optimizer = optim.Adam(
                 [param for param in self.disc_model.parameters() if param.requires_grad],
                 lr=config.discriminator_learning_rate,
-                betas=(config.beta1, 0.999)
+                betas=(config.gen_disc_beta1, 0.999)
             )
             self.optimizers = [self.generator_optimizer, self.discriminator_optimizer]
 
