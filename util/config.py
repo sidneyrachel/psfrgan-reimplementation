@@ -1,4 +1,10 @@
 import json
+import torch
+import numpy as np
+import random
+import os
+
+from util.common import get_gpu_memory_map, make_directories
 
 
 class Config:
@@ -10,6 +16,45 @@ class Config:
         base_config.update(config)
 
         self.config = base_config
+
+        save_directory = os.path.join(self.config['checkpoint_directory_path'], self.config['experiment_name'])
+        make_directories(save_directory)
+        filename = os.path.join(save_directory, f'{self.config["phase"]}_config.json')
+
+        structured_config = json.dumps(self.config, indent=4)
+
+        with open(filename, 'w') as config_file:
+            config_file.write(structured_config)
+
+        if self.config['num_gpu'] > 0:
+            self.config['gpu_ids'] = get_gpu_memory_map()[1][:self.config['num_gpu']]
+
+            if not isinstance(self.config['gpu_ids'], list):
+                self.config['gpu_ids'] = [self.config['gpu_ids']]
+
+            torch.cuda.set_device(self.config['gpu_ids'][0])
+
+            self.config['device'] = torch.device(f'cuda:{self.config["gpu_ids"][0 % self.config["num_gpu"]]}')
+        else:
+            self.config['gpu_ids'] = []
+            self.config['device'] = torch.device('cpu')
+
+        np.random.seed(self.config['seed'])
+        random.seed(self.config['seed'])
+        torch.manual_seed(self.config['seed'])
+        torch.cuda.manual_seed_all(self.config['seed'])
+
+    @property
+    def seed(self):
+        return self.config['seed']
+
+    @property
+    def device(self):
+        return self.config['device']
+
+    @property
+    def gpu_ids(self):
+        return self.config['gpu_ids']
 
     @property
     def low_res_size(self):

@@ -75,9 +75,9 @@ class FPN(nn.Module):
             )
             head_channel = head_channel // 2
 
-        self.encoder = nn.Sequential(*self.encoders)
-        self.body = nn.Sequential(*self.bodies)
-        self.decoder = nn.Sequential(*self.decoders)
+        self.encoder = nn.Sequential(*encoders)
+        self.body = nn.Sequential(*bodies)
+        self.decoder = nn.Sequential(*decoders)
         self.image_conv = ConvLayer(
             in_channel=clip_channel_function(head_channel),
             out_channel=3

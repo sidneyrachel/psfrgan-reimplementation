@@ -32,6 +32,7 @@
   "checkpoint_directory_path": "./checkpoints",
   "init_learning_rate_num_epoch": 100,
   "start_epoch": 1,
+  "experiment_name": "psfrgan_1",
   "decay_next_num_epoch": 100,
   "gamma_decay_iter": 50,
   "learning_rate_policy":"step",
@@ -45,5 +46,6 @@
   "scale_size": null,
   "crop_size": null,
   "is_flipped": false,
-  "destination_directory": null
+  "destination_directory": null,
+  "seed": 123
 }

@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import os
+import subprocess
 
 from variable.mask import MASK_COLORMAP
 
@@ -70,3 +71,33 @@ def make_directories(directories):
     else:
         if not os.path.exists(directories):
             os.makedirs(directories)
+
+
+def get_gpu_memory_map():
+    """Get the current gpu usage within visible cuda devices.
+
+    Returns
+    -------
+    Memory Map: dict
+        Keys are device ids as integers.
+        Values are memory usage as integers in MB.
+    Device Ids: gpu ids sorted in descending order according to the available memory.
+    """
+    result = subprocess.check_output(
+        [
+            'nvidia-smi',
+            '--query-gpu=memory.used',
+            '--format=csv,nounits,noheader'
+        ]).decode('utf-8')
+
+    # Convert lines into a dictionary
+    gpu_memory = np.array([int(x) for x in result.strip().split('\n')])
+
+    if 'CUDA_VISIBLE_DEVICES' in os.environ:
+        visible_devices = sorted([int(x) for x in os.environ['CUDA_VISIBLE_DEVICES'].split(',')])
+    else:
+        visible_devices = range(len(gpu_memory))
+
+    gpu_memory_map = dict(zip(range(len(visible_devices)), gpu_memory[visible_devices]))
+
+    return gpu_memory_map, sorted(gpu_memory_map, key=gpu_memory_map.get)

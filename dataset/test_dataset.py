@@ -7,10 +7,12 @@ from model.util import compose_transform
 
 class TestDataset(Dataset):
     def __init__(self, config):
-        self.image_paths = sorted(make_dataset(
+        self.image_paths, _ = make_dataset(
             path=config.dataset_base_path,
             max_data_count=config.max_data_count
-        ))
+        )
+
+        self.image_paths = sorted(self.image_paths)
 
         in_channel = config.test_in_channel
         self.transform = compose_transform(config, grayscale=(in_channel == 1))

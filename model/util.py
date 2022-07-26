@@ -249,13 +249,13 @@ def compose_transform(
 
     if grayscale:
         transform_actions.append(transforms.Grayscale(1))
-    if 'resize' in config.preprocess:
+    if config.preprocess is not None and 'resize' in config.preprocess:
         output_size = [config.scale_size, config.scale_size]
         transform_actions.append(transforms.Resize(output_size, method))
-    elif 'scale_width' in config.preprocess:
+    elif config.preprocess is not None and 'scale_width' in config.preprocess:
         transform_actions.append(transforms.Lambda(lambda image: scale_image_by_width(image, config.scale_size, method)))
 
-    if 'crop' in config.preprocess:
+    if config.preprocess is not None and 'crop' in config.preprocess:
         if params is None:
             transform_actions.append(transforms.RandomCrop(config.crop_size))
         else:
