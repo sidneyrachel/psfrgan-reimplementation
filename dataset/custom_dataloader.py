@@ -1,8 +1,8 @@
 from torch.utils.data import DataLoader
 
 from variable.dataset import DatasetNameEnum
-from ffhq_dataset import FFHQDataset
-from test_dataset import TestDataset
+from dataset.ffhq_dataset import FFHQDataset
+from dataset.test_dataset import TestDataset
 
 
 class CustomDataLoader:
