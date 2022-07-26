@@ -100,6 +100,10 @@ class Config:
         return self.config['discriminator_in_channel']
 
     @property
+    def test_in_channel(self):
+        return self.config['test_in_channel']
+
+    @property
     def vgg_pretrained_weight_file(self):
         return self.config['vgg_pretrained_weight_file']
 
@@ -237,3 +241,24 @@ class Config:
     @property
     def save_iteration_frequency(self):
         return self.config['save_iteration_frequency']
+
+    @property
+    def preprocess(self):
+        # Enum: resize_and_crop | crop | scale_width | scale_width_and_crop
+        return self.config['preprocess']
+
+    @property
+    def scale_size(self):
+        return self.config['scale_size']
+
+    @property
+    def crop_size(self):
+        return self.config['crop_size']
+
+    @property
+    def is_flipped(self):
+        return self.config['is_flipped']
+
+    @property
+    def destination_directory(self):
+        return self.config['destination_directory']

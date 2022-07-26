@@ -21,10 +21,14 @@ class FFHQDataset(Dataset):
             max_data_count=self.max_data_count
         )
 
+        self.image_paths = sorted(self.image_paths)
+
         self.mask_paths, _ = make_dataset(
             path=os.path.join(self.dataset_base_path, 'masks512'),
             filename_set=filename_set
         )
+
+        self.mask_paths = sorted(self.mask_paths)
 
         self.to_tensor = transforms.Compose([
             transforms.ToTensor(),

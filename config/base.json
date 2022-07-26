@@ -3,12 +3,12 @@
   "high_res_size": 512,
   "vgg_pretrained_weight_file": "./pretrain_models/vgg19-dcbb9e9d.pth",
   "max_data_count": 1000000000,
-  "is_shuffled": false,
+  "is_shuffled": true,
   "num_thread": 8,
   "fpn_norm_type": "bn",
   "num_gpu": 2,
   "fpn_pretrained_weight_file": "./pretrain_models/parse_multi_iter_90000.pth",
-  "psfr_pretrained_weight_file": "",
+  "psfr_pretrained_weight_file": null,
   "generator_out_size": "512",
   "generator_norm": "spade",
   "num_discriminator_filter": 64,
@@ -39,5 +39,11 @@
   "log_archive_directory": "./checkpoints/log_archives",
   "print_iteration_frequency": 100,
   "visual_iteration_frequency": 500,
-  "save_iteration_frequency": 1000000000
+  "save_iteration_frequency": 1000000000,
+  "test_in_channel": 3,
+  "preprocess": null,
+  "scale_size": null,
+  "crop_size": null,
+  "is_flipped": false,
+  "destination_directory": null
 }

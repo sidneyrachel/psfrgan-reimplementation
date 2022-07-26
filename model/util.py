@@ -1,6 +1,8 @@
 import torch
 from torch import nn
 from torch.optim import lr_scheduler
+import torchvision.transforms as transforms
+from PIL import Image
 
 from variable.model import ReluTypeEnum, GenDisNormTypeEnum, \
     InitWeightTypeEnum, LearningRatePolicyEnum, MainModelNameEnum
@@ -193,3 +195,109 @@ def create_model(config):
         return FPNModel(config)
     else:
         raise Exception(f'Main model name is not supported. Main model name: {config.main_model_name}.')
+
+
+def scale_image_by_width(image, target_width, method=Image.BICUBIC):
+    image_width, image_height = image.size
+
+    if image_width == target_width:
+        return image
+
+    target_height = int(target_width * image_height / image_width)
+
+    return image.resize((target_width, target_height), method)
+
+
+def crop_image(image, pos, size):
+    image_width, image_height = image.size
+    x_pos, y_pos = pos
+    target_width = target_height = size
+
+    if image_width > target_width or image_height > target_height:
+        return image.crop((x_pos, y_pos, x_pos + target_width, y_pos + target_height))
+
+    return image
+
+
+def flip_image(image, is_flipped):
+    if is_flipped:
+        return image.transpose(Image.FLIP_LEFT_RIGHT)
+
+    return image
+
+
+def print_size_warning(image_width, image_height, width, height):
+    if not hasattr(print_size_warning, 'is_printed'):
+        print(f'The image size needs to be a multiple of 4. '
+              f'Loaded image: {image_width}x{image_height}. '
+              f'Loaded image is adjusted to: {width}x{height}.')
+
+        print_size_warning.is_printed = True
+
+
+def make_image_to_power_2_multiplication(image, base, method=Image.BICUBIC):
+    image_width, image_height = image.size
+
+    height = int(round(image_height / base) * base)
+    width = int(round(image_width / base) * base)
+
+    if (height == image_height) and (width == image_width):
+        return image
+
+    print_size_warning(image_width, image_height, width, height)
+
+    return image.resize((width, height), method)
+
+
+def compose_transform(
+        config,
+        params=None,
+        grayscale=False,
+        method=Image.BICUBIC,
+        is_converted=True
+):
+    transform_actions = []
+
+    if grayscale:
+        transform_actions.append(transforms.Grayscale(1))
+    if 'resize' in config.preprocess:
+        output_size = [config.scale_size, config.scale_size]
+        transform_actions.append(transforms.Resize(output_size, method))
+    elif 'scale_width' in config.preprocess:
+        transform_actions.append(transforms.Lambda(lambda image: scale_image_by_width(image, config.scale_size, method)))
+
+    if 'crop' in config.preprocess:
+        if params is None:
+            transform_actions.append(transforms.RandomCrop(config.crop_size))
+        else:
+            if 'crop_size' in params:
+                transform_actions.append(transforms.Lambda(
+                    lambda image: crop_image(image, params['crop_pos'], params['crop_size'])
+                ))
+            else:
+                transform_actions.append(transforms.Lambda(
+                    lambda image: crop_image(image, params['crop_pos'], config.crop_size)
+                ))
+
+    if config.preprocess is None:
+        transform_actions.append(transforms.Lambda(
+            lambda image: make_image_to_power_2_multiplication(image, base=4, method=method)
+        ))
+
+    if config.is_flipped:
+        if params is None:
+            transform_actions.append(transforms.RandomHorizontalFlip())
+        elif params['flip']:
+            transform_actions.append(transforms.Lambda(
+                lambda image: flip_image(image, params['flip'])
+            ))
+
+    if is_converted:
+        transform_actions += [transforms.ToTensor()]
+
+        if grayscale:
+            transform_actions += [transforms.Normalize((0.5,), (0.5,))]
+        else:
+            transform_actions += [transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
+
+    return transforms.Compose(transform_actions)

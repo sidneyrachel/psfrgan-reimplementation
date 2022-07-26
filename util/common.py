@@ -30,6 +30,15 @@ def batch_numpy_to_image(array, size=None):
     return np.array(out_images).astype(np.uint8)
 
 
+# Input shape: (B, C, H, W)
+# Return image: RGB (0, 255)
+def batch_tensor_to_image(tensor, size=None):
+    array = tensor_to_numpy(tensor)
+    out_images = batch_numpy_to_image(array, size)
+
+    return out_images
+
+
 def colorize_mask(tensor, size=None):
     if len(tensor.shape) < 4:
         tensor = tensor.unsqueeze(0)

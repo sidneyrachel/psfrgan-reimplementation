@@ -2,6 +2,7 @@ from torch.utils.data import DataLoader
 
 from variable.dataset import DatasetNameEnum
 from ffhq_dataset import FFHQDataset
+from test_dataset import TestDataset
 
 
 class CustomDataLoader:
@@ -10,6 +11,8 @@ class CustomDataLoader:
 
         if self.dataset_name == DatasetNameEnum.FFHQ:
             self.dataset = FFHQDataset(config)
+        elif self.dataset_name == DatasetNameEnum.TEST:
+            self.dataset = TestDataset(config)
 
         drop_last = config.is_train
 
