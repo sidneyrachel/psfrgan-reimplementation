@@ -78,11 +78,11 @@ class FPN(nn.Module):
         self.encoder = nn.Sequential(*encoders)
         self.body = nn.Sequential(*bodies)
         self.decoder = nn.Sequential(*decoders)
-        self.image_conv = ConvLayer(
+        self.out_img_conv = ConvLayer(
             in_channel=clip_channel_function(head_channel),
             out_channel=3
         )
-        self.mask_conv = ConvLayer(
+        self.out_mask_conv = ConvLayer(
             in_channel=clip_channel_function(head_channel),
             out_channel=parsing_channel
         )
@@ -91,7 +91,7 @@ class FPN(nn.Module):
         feat = self.encoder(inp)
         outp = feat + self.body(feat)
         outp = self.decoder(outp)
-        image = self.image_conv(outp)
-        mask = self.mask_conv(outp)
+        image = self.out_img_conv(outp)
+        mask = self.out_mask_conv(outp)
 
         return mask, image

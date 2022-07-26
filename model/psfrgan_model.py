@@ -146,7 +146,7 @@ class PSFRGANModel(BaseModel):
             self.high_res_mask
         ) * self.config.ss_lambda
 
-        self.perceptual_loss = self.perceptual_criterion(
+        self.pcp_loss = self.perceptual_criterion(
             self.super_res_image_feats,
             self.high_res_image_feats
         ) * self.config.perceptual_lambda
@@ -169,7 +169,7 @@ class PSFRGANModel(BaseModel):
             )
         self.gen_loss = gen_loss * self.config.gen_lambda / self.config.num_discriminator
 
-        total_loss = self.pix_loss + self.perceptual_loss + self.fm_loss + self.gen_loss + self.ss_loss
+        total_loss = self.pix_loss + self.pcp_loss + self.fm_loss + self.gen_loss + self.ss_loss
 
         total_loss.backward()
 

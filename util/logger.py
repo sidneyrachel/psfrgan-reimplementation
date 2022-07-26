@@ -20,6 +20,8 @@ class Logger():
 
         existing_log = None
 
+        make_directories([config.log_directory, config.log_archive_directory])
+
         for log_name in os.listdir(config.log_directory):
             if config.experiment_name in log_name:
                 existing_log = log_name
@@ -34,7 +36,6 @@ class Logger():
         self.writer = SummaryWriter(self.log_directory)
 
     def make_log_file(self):
-        make_directories(self.log_directory)
         self.text_files = OrderedDict()
 
         for phase in self.phase_keys:

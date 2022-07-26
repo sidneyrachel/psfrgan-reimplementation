@@ -26,21 +26,22 @@ class NLayerDiscriminator(nn.Module):
         )]
 
         for i in range(depth):
-            in_channel = min(base_channel * 2**i, max_channel)
-            out_channel = min(base_channel * 2**(i + 1), max_channel)
+            in_ch = min(base_channel * 2**i, max_channel)
+            out_ch = min(base_channel * 2**(i + 1), max_channel)
+
             models.append(
                 ConvLayer(
-                    in_channel=in_channel,
-                    out_channel=out_channel,
+                    in_channel=in_ch,
+                    out_channel=out_ch,
                     scale=ScaleTypeEnum.DOWN_AVG.value,
                     norm_type=norm_type,
                     relu_type=relu_type
                 )
             )
 
-        self.model = nn.Sequential(*self.models)
+        self.model = nn.Sequential(*models)
         self.conv_out = ConvLayer(
-            in_channel=out_channel,
+            in_channel=out_ch,
             out_channel=1,
             is_padding_used=False
         )

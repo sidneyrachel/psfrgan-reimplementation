@@ -7,18 +7,18 @@ class ReluLayer(nn.Module):
         super(ReluLayer, self).__init__()
 
         if relu_type == ReluTypeEnum.RELU.value:
-            self.relu = nn.ReLU(True)
+            self.func = nn.ReLU(True)
         elif relu_type == ReluTypeEnum.LEAKY_RELU.value:
-            self.relu = nn.LeakyReLU(0.2, inplace=True)
+            self.func = nn.LeakyReLU(0.2, inplace=True)
         elif relu_type == ReluTypeEnum.PRELU.value:
-            self.relu = nn.PReLU(num_channel)
+            self.func = nn.PReLU(num_channel)
         elif relu_type == ReluTypeEnum.SELU.value:
-            self.relu = nn.SELU(True)
+            self.func = nn.SELU(True)
         elif relu_type is None:
-            self.relu = lambda inp: inp * 1.0
+            self.func = lambda inp: inp * 1.0
         else:
             raise Exception(f'Relu type is not supported. '
                             f'Relu type: {relu_type}.')
 
     def forward(self, inp):
-        return self.relu(inp)
+        return self.func(inp)

@@ -33,4 +33,5 @@ class CustomDataLoader:
         return len(self.dataset)
 
     def __iter__(self):
-        return self.dataloader
+        for i, data in enumerate(self.dataloader):
+            yield data

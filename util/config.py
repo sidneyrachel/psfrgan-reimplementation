@@ -273,9 +273,17 @@ class Config:
     def resume_iter_on_top_resume_epoch(self):
         return self.config['resume_iter_on_top_resume_epoch']
 
+    @resume_iter_on_top_resume_epoch.setter
+    def resume_iter_on_top_resume_epoch(self, value):
+        self.config['resume_iter_on_top_resume_epoch'] = value
+
     @property
     def resume_epoch(self):
         return self.config['resume_epoch']
+
+    @resume_epoch.setter
+    def resume_epoch(self, value):
+        self.config['resume_epoch'] = value
 
     @property
     def print_iteration_frequency(self):

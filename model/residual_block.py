@@ -15,9 +15,9 @@ class ResidualBlock(nn.Module):
         super(ResidualBlock, self).__init__()
 
         if scale is None and in_channel == out_channel:
-            self.shortcut_function = lambda inp: inp
+            self.shortcut_func = lambda inp: inp
         else:
-            self.shortcut_function = ConvLayer(
+            self.shortcut_func = ConvLayer(
                 in_channel=in_channel,
                 out_channel=out_channel,
                 kernel_size=3,
@@ -33,7 +33,7 @@ class ResidualBlock(nn.Module):
         else:
             raise Exception(f'Scale is not supported. Scale: {scale}.')
 
-        self.conv_1 = ConvLayer(
+        self.conv1 = ConvLayer(
             in_channel=in_channel,
             out_channel=out_channel,
             kernel_size=3,
@@ -42,7 +42,7 @@ class ResidualBlock(nn.Module):
             relu_type=relu_type
         )
 
-        self.conv_2 = ConvLayer(
+        self.conv2 = ConvLayer(
             in_channel=out_channel,
             out_channel=out_channel,
             kernel_size=3,
@@ -52,9 +52,9 @@ class ResidualBlock(nn.Module):
         )
 
     def forward(self, inp):
-        identity = self.shortcut_function(inp)
+        identity = self.shortcut_func(inp)
 
-        res = self.conv_1(inp)
-        res = self.conv_2(res)
+        res = self.conv1(inp)
+        res = self.conv2(res)
 
         return identity + res

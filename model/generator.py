@@ -51,14 +51,14 @@ class Generator(nn.Module):
         bodies = []
 
         for idx in range(up_steps):
-            in_channel, out_channel = clip_channel_function(head_channel), clip_channel_function(head_channel // 2)
+            in_ch, out_ch = clip_channel_function(head_channel), clip_channel_function(head_channel // 2)
             bodies.append(
                 nn.Sequential(
                     nn.Upsample(scale_factor=2),
-                    nn.Conv2d(in_channel, out_channel, kernel_size=3, padding=1),
+                    nn.Conv2d(in_ch, out_ch, kernel_size=3, padding=1),
                     StyleTransformBlock(
-                        in_channel=in_channel,
-                        out_channel=out_channel,
+                        in_channel=out_ch,
+                        out_channel=out_ch,
                         ref_channel=ref_channel,
                         relu_type=relu_type,
                         norm_type=norm_type
@@ -67,7 +67,7 @@ class Generator(nn.Module):
             )
             head_channel = head_channel // 2
 
-        self.conv_out = nn.Conv2d(
+        self.img_out = nn.Conv2d(
             clip_channel_function(head_channel),
             out_channel,
             kernel_size=3,
@@ -104,6 +104,6 @@ class Generator(nn.Module):
         for idx, layer in enumerate(self.body):
             feat = self.forward_spade(layer, feat, reference_input)
 
-        outp = self.conv_out(feat)
+        outp = self.img_out(feat)
 
         return outp

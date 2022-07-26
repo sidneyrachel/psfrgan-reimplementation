@@ -9,7 +9,7 @@
   "num_gpu": 2,
   "fpn_pretrained_weight_file": "./pretrain_models/parse_multi_iter_90000.pth",
   "psfr_pretrained_weight_file": null,
-  "generator_out_size": "512",
+  "generator_out_size": 512,
   "generator_norm": "spade",
   "num_discriminator_filter": 64,
   "num_discriminator_layer": 4,

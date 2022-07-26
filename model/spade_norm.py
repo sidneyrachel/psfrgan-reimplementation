@@ -3,7 +3,7 @@ from torch import nn
 from variable.model import NormTypeEnum
 
 
-class SPADENorm:
+class SPADENorm(nn.Module):
     def __init__(
             self,
             norm_channel,
@@ -19,7 +19,7 @@ class SPADENorm:
         self.norm_type = norm_type
 
         if self.norm_type == NormTypeEnum.SPADE.value:
-            self.conv_1 = nn.Sequential(
+            self.conv1 = nn.Sequential(
                 nn.Conv2d(ref_channel, mid_channel, kernel_size, 1, kernel_size // 2),
                 nn.LeakyReLU(0.2, True)
             )
@@ -27,7 +27,7 @@ class SPADENorm:
             self.beta_conv = nn.Conv2d(mid_channel, norm_channel, kernel_size, 1, kernel_size // 2)
 
     def calculate_gamma_beta(self, inp):
-        outp = self.conv_1(inp)
+        outp = self.conv1(inp)
         gamma = self.gamma_conv(outp)
         beta = self.beta_conv(outp)
 

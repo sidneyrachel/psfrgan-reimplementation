@@ -30,13 +30,13 @@ class ConvLayer(nn.Module):
         stride = 2 if self.scale == ScaleTypeEnum.DOWN.value else 1
 
         if scale == ScaleTypeEnum.UP.value:
-            self.scale_function = lambda inp: nn.functional.interpolate(inp, scale_factor=2, mode='nearest')
+            self.scale_func = lambda inp: nn.functional.interpolate(inp, scale_factor=2, mode='nearest')
         else:
-            self.scale_function = lambda inp: inp
+            self.scale_func = lambda inp: inp
 
-        self.reflection_padding_2d = nn.ReflectionPad2d(int(np.ceil((kernel_size - 1.) / 2)))
-        self.conv_2d = nn.Conv2d(in_channel, out_channel, kernel_size, stride, bias=self.is_bias)
-        self.average_pooling_2d = nn.AvgPool2d(2, 2)
+        self.reflection_pad = nn.ReflectionPad2d(int(np.ceil((kernel_size - 1.) / 2)))
+        self.conv2d = nn.Conv2d(in_channel, out_channel, kernel_size, stride, bias=self.is_bias)
+        self.avgpool = nn.AvgPool2d(2, 2)
         self.relu = ReluLayer(
             num_channel=out_channel,
             relu_type=relu_type
@@ -47,15 +47,15 @@ class ConvLayer(nn.Module):
         )
 
     def forward(self, inp):
-        outp = self.scale_function(inp)
+        outp = self.scale_func(inp)
 
         if self.is_padding_used:
-            outp = self.reflection_padding_2d(outp)
+            outp = self.reflection_pad(outp)
 
-        outp = self.conv_2d(outp)
+        outp = self.conv2d(outp)
 
         if self.scale == ScaleTypeEnum.DOWN_AVG.value:
-            outp = self.average_pooling_2d(outp)
+            outp = self.avgpool(outp)
 
         outp = self.norm(outp)
         outp = self.relu(outp)

@@ -10,7 +10,7 @@
   "dataset_base_path": "../datasets/CelebAHQ_preprocessed",
   "test_in_channel": 3,
   "preprocess": null,
-  "scale_size": 512,
+  "scale_size": 256,
   "crop_size": 256,
   "is_flipped": false,
   "main_model_name": "psfrgan",

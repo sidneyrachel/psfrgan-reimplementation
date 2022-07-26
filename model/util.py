@@ -91,7 +91,8 @@ def build_generator(
         config,
         is_train=True,
         weight_norm_type=None,
-        relu_type=ReluTypeEnum.LEAKY_RELU.value):
+        relu_type=ReluTypeEnum.LEAKY_RELU.value
+):
     gen = Generator(
         out_channel=3,
         out_size=config.generator_out_size,

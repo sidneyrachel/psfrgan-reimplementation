@@ -2,12 +2,12 @@ from enum import Enum
 
 
 class DatasetNameEnum(Enum):
-    FFHQ = 'ffhq',
+    FFHQ = 'ffhq'
     TEST = 'test'
 
 
 class PreprocessActionEnum(Enum):
-    RESIZE_AND_CROP = 'resize_and_crop',
-    CROP = 'crop',
-    SCALE_WIDTH = 'scale_width',
+    RESIZE_AND_CROP = 'resize_and_crop'
+    CROP = 'crop'
+    SCALE_WIDTH = 'scale_width'
     SCALE_WIDTH_AND_CROP = 'scale_width_and_crop'

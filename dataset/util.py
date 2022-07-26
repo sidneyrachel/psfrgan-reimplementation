@@ -19,7 +19,7 @@ def make_dataset(
 
     for root, _, sub_filenames in sorted(os.walk(path)):
         for filename in sub_filenames:
-            if filename_set and (filename not in filename_set):
+            if (filename_set and (filename not in filename_set)) or not filename.endswith('.png'):
                 continue
 
             filenames.append(filename)
@@ -77,7 +77,7 @@ def run_image_augmentation(
 
 def convert_to_one_hot(image):
     num_label = len(MASK_COLORMAP)
-    image = np.array(image, dtype=np.unit8)
+    image = np.array(image, dtype=np.uint8)
     height, width = image.shape[:2]
     one_hot_label = np.zeros((num_label, height, width))
     colormap = np.array(MASK_COLORMAP).reshape(num_label, 1, 1, 3)
