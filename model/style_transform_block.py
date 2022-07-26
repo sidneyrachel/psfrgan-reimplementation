@@ -11,7 +11,7 @@ class StyleTransformBlock(nn.Module):
             out_channel,
             ref_channel,
             relu_type,
-            norm_type=NormTypeEnum.SPADE
+            norm_type=NormTypeEnum.SPADE.value
     ):
         super().__init__()
 

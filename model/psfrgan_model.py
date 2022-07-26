@@ -22,14 +22,14 @@ class PSFRGANModel(BaseModel):
         )
         self.gen_model = build_generator(
             config=config,
-            weight_norm_type=GenDisNormTypeEnum.SPECTRAL
+            weight_norm_type=GenDisNormTypeEnum.SPECTRAL.value
         )
 
         if self.is_train:
             self.disc_model = build_discriminator(
                 config=config,
                 in_channel=config.discriminator_in_channel,
-                weight_norm_type=GenDisNormTypeEnum.SPECTRAL
+                weight_norm_type=GenDisNormTypeEnum.SPECTRAL.value
             )
 
             self.vgg_model = PerceptualLossFeature(weight_path=config.vgg_pretrained_weight_file).to(config.device)
@@ -37,27 +37,27 @@ class PSFRGANModel(BaseModel):
             if len(config.gpu_ids) > 0:
                 self.vgg_model = nn.DataParallel(self.vgg_model, config.gpu_ids, output_device=config.device)
 
-        self.model_names = [ModelNameEnum.GENERATOR]
+        self.model_names = [ModelNameEnum.GENERATOR.value]
         self.loss_names = [
-            LossNameEnum.PIX,
-            LossNameEnum.PERCEPTUAL,
-            LossNameEnum.GENERATOR,
-            LossNameEnum.FEATURE_MATCHING,
-            LossNameEnum.DISCRIMINATOR,
-            LossNameEnum.SEMANTIC_STYLE
+            LossNameEnum.PIX.value,
+            LossNameEnum.PERCEPTUAL.value,
+            LossNameEnum.GENERATOR.value,
+            LossNameEnum.FEATURE_MATCHING.value,
+            LossNameEnum.DISCRIMINATOR.value,
+            LossNameEnum.SEMANTIC_STYLE.value
         ]
         # self.visual_names = [
-        #     VisualNameEnum.LOW_RES_IMAGE,
-        #     VisualNameEnum.SUPER_RES_IMAGE,
-        #     VisualNameEnum.HIGH_RES_IMAGE,
-        #     VisualNameEnum.LOW_RES_MASK,
-        #     VisualNameEnum.HIGH_RES_MASK
+        #     VisualNameEnum.LOW_RES_IMAGE.value,
+        #     VisualNameEnum.SUPER_RES_IMAGE.value,
+        #     VisualNameEnum.HIGH_RES_IMAGE.value,
+        #     VisualNameEnum.LOW_RES_MASK.value,
+        #     VisualNameEnum.HIGH_RES_MASK.value
         # ]
         self.fm_weights = [1**x for x in range(config.num_discriminator)]
 
         if self.is_train:
-            self.model_names = [ModelNameEnum.GENERATOR, ModelNameEnum.DISCRIMINATOR]
-            self.load_model_names = [ModelNameEnum.GENERATOR, ModelNameEnum.DISCRIMINATOR]
+            self.model_names = [ModelNameEnum.GENERATOR.value, ModelNameEnum.DISCRIMINATOR.value]
+            self.load_model_names = [ModelNameEnum.GENERATOR.value, ModelNameEnum.DISCRIMINATOR.value]
 
             self.fm_criterion = FMLoss().to(config.device)
             self.gan_criterion = GANLoss(config.gan_mode).to(config.device)

@@ -8,7 +8,7 @@ class SPADENorm:
             self,
             norm_channel,
             ref_channel,
-            norm_type=NormTypeEnum.SPADE,
+            norm_type=NormTypeEnum.SPADE.value,
             kernel_size=3
     ):
         super().__init__()
@@ -18,7 +18,7 @@ class SPADENorm:
 
         self.norm_type = norm_type
 
-        if self.norm_type == NormTypeEnum.SPADE:
+        if self.norm_type == NormTypeEnum.SPADE.value:
             self.conv_1 = nn.Sequential(
                 nn.Conv2d(ref_channel, mid_channel, kernel_size, 1, kernel_size // 2),
                 nn.LeakyReLU(0.2, True)
@@ -39,11 +39,11 @@ class SPADENorm:
         if inp.shape[-1] != reference_inp.shape[-1]:
             reference_inp = nn.functional.interpolate(reference_inp, inp.shape[2:], mode='bicubic', align_corners=False)
 
-        if self.norm_type == NormTypeEnum.SPADE:
+        if self.norm_type == NormTypeEnum.SPADE.value:
             gamma, beta = self.calculate_gamma_beta(reference_inp)
 
             return (normalized_input * gamma) + beta
-        elif self.norm_type == NormTypeEnum.IN:
+        elif self.norm_type == NormTypeEnum.IN.value:
             return normalized_input
         else:
             raise Exception(f'Norm type is not supported. Norm type: {self.norm_type}.')

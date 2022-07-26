@@ -24,12 +24,12 @@ class ConvLayer(nn.Module):
         self.is_bias = is_bias
         self.scale = scale
 
-        if norm_type == NormTypeEnum.BN:
+        if norm_type == NormTypeEnum.BN.value:
             self.is_bias = False
 
-        stride = 2 if self.scale == ScaleTypeEnum.DOWN else 1
+        stride = 2 if self.scale == ScaleTypeEnum.DOWN.value else 1
 
-        if scale == ScaleTypeEnum.UP:
+        if scale == ScaleTypeEnum.UP.value:
             self.scale_function = lambda inp: nn.functional.interpolate(inp, scale_factor=2, mode='nearest')
         else:
             self.scale_function = lambda inp: inp
@@ -54,7 +54,7 @@ class ConvLayer(nn.Module):
 
         outp = self.conv_2d(outp)
 
-        if self.scale == ScaleTypeEnum.DOWN_AVG:
+        if self.scale == ScaleTypeEnum.DOWN_AVG.value:
             outp = self.average_pooling_2d(outp)
 
         outp = self.norm(outp)

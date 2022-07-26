@@ -10,19 +10,19 @@ class FPNModel(BaseModel):
     def __init__(self, config):
         BaseModel.__init__(self, config)
 
-        self.loss_names = [LossNameEnum.FPN, LossNameEnum.PIX]
+        self.loss_names = [LossNameEnum.FPN.value, LossNameEnum.PIX.value]
         # self.visual_names = [
-        #     VisualNameEnum.LOW_RES_IMAGE,
-        #     VisualNameEnum.SUPER_RES_IMAGE,
-        #     VisualNameEnum.PREDICTED_MASK,
-        #     VisualNameEnum.GROUND_TRUTH_MASK,
-        #     VisualNameEnum.HIGH_RES_IMAGE
+        #     VisualNameEnum.LOW_RES_IMAGE.value,
+        #     VisualNameEnum.SUPER_RES_IMAGE.value,
+        #     VisualNameEnum.PREDICTED_MASK.value,
+        #     VisualNameEnum.GROUND_TRUTH_MASK.value,
+        #     VisualNameEnum.HIGH_RES_IMAGE.value
         # ]
-        self.model_names = [ModelNameEnum.FPN]
+        self.model_names = [ModelNameEnum.FPN.value]
         self.fpn_model = build_fpn(config)
 
         if self.is_train:
-            self.load_model_names = [ModelNameEnum.FPN]
+            self.load_model_names = [ModelNameEnum.FPN.value]
             self.fpn_criterion = torch.nn.CrossEntropyLoss()
             self.pix_criterion = torch.nn.L1Loss()
             self.optimizer = torch.optim.Adam(

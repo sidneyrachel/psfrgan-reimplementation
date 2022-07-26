@@ -10,7 +10,7 @@ from util.create import create_dataset, create_model
 
 if __name__ == '__main__':
     config = Config(
-        filename='config/psfrgan/test.json'
+        filename='./config/psfrgan/test.json'
     )
 
     dataset = create_dataset(config)

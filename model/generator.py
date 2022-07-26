@@ -13,9 +13,9 @@ class Generator(nn.Module):
             out_channel,
             out_size=512,
             min_feat_size=16,
-            relu_type=ReluTypeEnum.RELU,
+            relu_type=ReluTypeEnum.RELU.value,
             channel_range=[32, 1024],
-            norm_type=NormTypeEnum.SPADE
+            norm_type=NormTypeEnum.SPADE.value
     ):
         super().__init__()
 

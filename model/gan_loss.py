@@ -18,13 +18,13 @@ class GANLoss(nn.Module):
         self.register_buffer('fake_label', torch.tensor(target_fake_label))
         self.gan_mode = gan_mode
 
-        if gan_mode == GANModeEnum.LSGAN:
+        if gan_mode == GANModeEnum.LSGAN.value:
             self.loss = nn.MSELoss()
-        elif gan_mode == GANModeEnum.VANILLA:
+        elif gan_mode == GANModeEnum.VANILLA.value:
             self.loss = nn.BCEWithLogitsLoss()
-        elif gan_mode == GANModeEnum.HINGE:
+        elif gan_mode == GANModeEnum.HINGE.value:
             pass
-        elif gan_mode == GANModeEnum.WGANGP:
+        elif gan_mode == GANModeEnum.WGANGP.value:
             self.loss = None
         else:
             raise Exception(f'GAN mode is not supported. GAN mode: {gan_mode}.')
@@ -39,10 +39,10 @@ class GANLoss(nn.Module):
 
     # Calculate loss given prediction output from Discriminator and ground truth label.
     def __call__(self, prediction, is_target_real, is_for_discriminator=True):
-        if self.gan_mode in [GANModeEnum.LSGAN, GANModeEnum.VANILLA]:
+        if self.gan_mode in [GANModeEnum.LSGAN.value, GANModeEnum.VANILLA.value]:
             target_tensor = self.get_target_tensor(prediction, is_target_real)
             loss = self.loss(prediction, target_tensor)
-        elif self.gan_mode == GANModeEnum.HINGE:
+        elif self.gan_mode == GANModeEnum.HINGE.value:
             if is_for_discriminator:
                 if is_target_real:
                     loss = nn.ReLU()(1 - prediction).mean()
@@ -53,7 +53,7 @@ class GANLoss(nn.Module):
                     raise Exception(f'The generator hinge loss is for real image.')
 
                 loss = -prediction.mean()
-        elif self.gan_mode == GANModeEnum.WGANGP:
+        elif self.gan_mode == GANModeEnum.WGANGP.value:
             if is_target_real:
                 loss = -prediction.mean()
             else:

@@ -12,9 +12,9 @@ def create_dataset(config):
 
 
 def create_model(config):
-    if config.main_model_name == MainModelNameEnum.PSFRGAN:
+    if config.main_model_name == MainModelNameEnum.PSFRGAN.value:
         return PSFRGANModel(config)
-    elif config.main_model_name == MainModelNameEnum.FPN:
+    elif config.main_model_name == MainModelNameEnum.FPN.value:
         return FPNModel(config)
     else:
         raise Exception(f'Main model name is not supported. Main model name: {config.main_model_name}.')

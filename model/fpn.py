@@ -15,8 +15,8 @@ class FPN(nn.Module):
             base_channel=64,
             parsing_channel=19,
             residual_depth=10,
-            relu_type=ReluTypeEnum.PRELU,
-            norm_type=NormTypeEnum.BN,
+            relu_type=ReluTypeEnum.PRELU.value,
+            norm_type=NormTypeEnum.BN.value,
             channel_range=[32, 512]
     ):
         super().__init__()
@@ -41,7 +41,7 @@ class FPN(nn.Module):
                 ResidualBlock(
                     in_channel=in_channel,
                     out_channel=out_channel,
-                    scale=ScaleTypeEnum.DOWN,
+                    scale=ScaleTypeEnum.DOWN.value,
                     relu_type=relu_type,
                     norm_type=norm_type
                 )
@@ -68,7 +68,7 @@ class FPN(nn.Module):
                 ResidualBlock(
                     in_channel=in_channel,
                     out_channel=out_channel,
-                    scale=ScaleTypeEnum.UP,
+                    scale=ScaleTypeEnum.UP.value,
                     relu_type=relu_type,
                     norm_type=norm_type
                 )

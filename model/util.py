@@ -14,19 +14,19 @@ from model.multi_scale_discriminator import MultiScaleDiscriminator
 def init_weights(
         network,
         # Normal is used in pix2pix and CycleGAN paper but xavier and kaiming work better for some applications.
-        init_type=InitWeightTypeEnum.NORMAL,
+        init_type=InitWeightTypeEnum.NORMAL.value,
         init_gain=0.02
 ):
     def init_function(layer):
         classname = layer.__class__.__name__
         if hasattr(layer, 'weight') and (classname.find('Conv') != -1 or classname.find('Linear') != -1):
-            if init_type == InitWeightTypeEnum.NORMAL:
+            if init_type == InitWeightTypeEnum.NORMAL.value:
                 nn.init.normal_(layer.weight.data, 0.0, init_gain)
-            elif init_type == InitWeightTypeEnum.XAVIER:
+            elif init_type == InitWeightTypeEnum.XAVIER.value:
                 nn.init.xavier_normal_(layer.weight.data, gain=init_gain)
-            elif init_type == InitWeightTypeEnum.KAIMING:
+            elif init_type == InitWeightTypeEnum.KAIMING.value:
                 nn.init.kaiming_normal_(layer.weight.data, a=0, mode='fan_in')
-            elif init_type == InitWeightTypeEnum.ORTHOGONAL:
+            elif init_type == InitWeightTypeEnum.ORTHOGONAL.value:
                 nn.init.orthogonal_(layer.weight.data, gain=init_gain)
             else:
                 raise Exception(f'Init type is unknown. Init type: {init_type}.')
@@ -45,9 +45,9 @@ def init_weights(
 def apply_norm(network, weight_norm_type):
     for layer in network.modules():
         if isinstance(layer, nn.Conv2d):
-            if weight_norm_type == GenDisNormTypeEnum.SPECTRAL:
+            if weight_norm_type == GenDisNormTypeEnum.SPECTRAL.value:
                 nn.utils.spectral_norm(layer)
-            elif weight_norm_type == GenDisNormTypeEnum.WEIGHT:
+            elif weight_norm_type == GenDisNormTypeEnum.WEIGHT.value:
                 nn.utils.weight_norm(layer)
             else:
                 pass
@@ -59,7 +59,7 @@ def build_fpn(
         in_size=512,
         out_size=512,
         min_feat_size=32,
-        relu_type=ReluTypeEnum.LEAKY_RELU,
+        relu_type=ReluTypeEnum.LEAKY_RELU.value,
         weight_path=None
 ):
     fpn = FPN(
@@ -91,7 +91,7 @@ def build_generator(
         config,
         is_train=True,
         weight_norm_type=None,
-        relu_type=ReluTypeEnum.LEAKY_RELU):
+        relu_type=ReluTypeEnum.LEAKY_RELU.value):
     gen = Generator(
         out_channel=3,
         out_size=config.generator_out_size,
@@ -137,7 +137,7 @@ def build_discriminator(
 
     init_weights(
         network=disc,
-        init_type=InitWeightTypeEnum.NORMAL,
+        init_type=InitWeightTypeEnum.NORMAL.value,
         init_gain=0.02
     )
 
@@ -149,7 +149,7 @@ def build_discriminator(
 # For other schedulers (step, plateau, and cosine), we use the default PyTorch schedulers.
 # See https://pytorch.org/docs/stable/optim.html for more details.
 def get_scheduler(optimizer, config):
-    if config.learning_rate_policy == LearningRatePolicyEnum.LINEAR:
+    if config.learning_rate_policy == LearningRatePolicyEnum.LINEAR.value:
         def lambda_rule(epoch):
             return 1.0 - max(
                 0,
@@ -160,13 +160,13 @@ def get_scheduler(optimizer, config):
             optimizer,
             lr_lambda=lambda_rule
         )
-    elif config.learning_rate_policy == LearningRatePolicyEnum.STEP:
+    elif config.learning_rate_policy == LearningRatePolicyEnum.STEP.value:
         scheduler = lr_scheduler.StepLR(
             optimizer,
             step_size=config.gamma_decay_iter,
             gamma=0.1
         )
-    elif config.learning_rate_policy == LearningRatePolicyEnum.PLATEAU:
+    elif config.learning_rate_policy == LearningRatePolicyEnum.PLATEAU.value:
         scheduler = lr_scheduler.ReduceLROnPlateau(
             optimizer,
             mode='min',
@@ -174,7 +174,7 @@ def get_scheduler(optimizer, config):
             threshold=0.01,
             patience=5
         )
-    elif config.learning_rate_policy == LearningRatePolicyEnum.COSINE:
+    elif config.learning_rate_policy == LearningRatePolicyEnum.COSINE.value:
         scheduler = lr_scheduler.CosineAnnealingLR(
             optimizer,
             T_max=config.init_learning_rate_num_epoch,

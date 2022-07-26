@@ -10,15 +10,15 @@ class PerceptualLossFeature(nn.Module):
     def __init__(
             self,
             weight_path,
-            model_name=PerceptualLossBaseModelEnum.VGG_19
+            model_name=PerceptualLossBaseModelEnum.VGG_19.value
     ):
         super(PerceptualLossFeature, self).__init__()
         self.features = None
 
-        if model_name == PerceptualLossBaseModelEnum.VGG_19:
+        if model_name == PerceptualLossBaseModelEnum.VGG_19.value:
             self.model = models.vgg19(pretrained=False)
             self.build_vgg_layers()
-        elif model_name == PerceptualLossBaseModelEnum.RESNET_50:
+        elif model_name == PerceptualLossBaseModelEnum.RESNET_50.value:
             self.model = models.resnet50(pretrained=False)
             self.build_resnet_layers()
         else:

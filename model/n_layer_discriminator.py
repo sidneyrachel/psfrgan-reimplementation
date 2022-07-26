@@ -11,7 +11,7 @@ class NLayerDiscriminator(nn.Module):
             max_channel=1024,
             depth=4,
             norm_type=None,
-            relu_type=ReluTypeEnum.LEAKY_RELU
+            relu_type=ReluTypeEnum.LEAKY_RELU.value
     ):
         super().__init__()
 
@@ -32,7 +32,7 @@ class NLayerDiscriminator(nn.Module):
                 ConvLayer(
                     in_channel=in_channel,
                     out_channel=out_channel,
-                    scale=ScaleTypeEnum.DOWN_AVG,
+                    scale=ScaleTypeEnum.DOWN_AVG.value,
                     norm_type=norm_type,
                     relu_type=relu_type
                 )

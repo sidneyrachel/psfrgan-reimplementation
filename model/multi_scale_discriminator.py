@@ -10,7 +10,7 @@ class MultiScaleDiscriminator(nn.Module):
             base_channel=64,
             num_layer=3,
             norm_type=None,
-            relu_type=ReluTypeEnum.LEAKY_RELU,
+            relu_type=ReluTypeEnum.LEAKY_RELU.value,
             num_discriminator=4
     ):
         super().__init__()

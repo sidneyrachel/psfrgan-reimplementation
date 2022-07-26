@@ -8,8 +8,8 @@ class ResidualBlock(nn.Module):
             self,
             in_channel,
             out_channel,
-            relu_type=ReluTypeEnum.PRELU,
-            norm_type=NormTypeEnum.BN,
+            relu_type=ReluTypeEnum.PRELU.value,
+            norm_type=NormTypeEnum.BN.value,
             scale=None
     ):
         super(ResidualBlock, self).__init__()
@@ -24,10 +24,10 @@ class ResidualBlock(nn.Module):
                 scale=scale
             )
 
-        if scale == ScaleTypeEnum.UP:
-            scale_configs = [ScaleTypeEnum.UP, None]
-        elif scale == ScaleTypeEnum.DOWN:
-            scale_configs = [None, ScaleTypeEnum.DOWN]
+        if scale == ScaleTypeEnum.UP.value:
+            scale_configs = [ScaleTypeEnum.UP.value, None]
+        elif scale == ScaleTypeEnum.DOWN.value:
+            scale_configs = [None, ScaleTypeEnum.DOWN.value]
         elif scale is None:
             scale_configs = [None, None]
         else:

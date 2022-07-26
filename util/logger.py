@@ -14,7 +14,7 @@ class Logger():
         timestamp = '{}'.format(datetime.now().strftime('%Y-%m-%d_%H:%M'))
         self.config = config
         self.log_directory = os.path.join(config.log_directory, f'{config.experiment_name}_{timestamp}')
-        self.phase_keys = [PhaseEnum.TRAIN, PhaseEnum.VAL, PhaseEnum.TEST]
+        self.phase_keys = [PhaseEnum.TRAIN.value, PhaseEnum.VAL.value, PhaseEnum.TEST.value]
         self.iteration_logs = []
         self.set_phase(config.phase)
 

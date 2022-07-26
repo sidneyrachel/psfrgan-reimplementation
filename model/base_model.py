@@ -82,7 +82,7 @@ class BaseModel(ABC):
 
     def update_learning_rate(self):
         for scheduler in self.schedulers:
-            if self.config.learning_rate_policy == LearningRatePolicyEnum.PLATEAU:
+            if self.config.learning_rate_policy == LearningRatePolicyEnum.PLATEAU.value:
                 scheduler.step(self.metric)
             else:
                 scheduler.step()
