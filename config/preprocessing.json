@@ -1,0 +1,9 @@
+{
+  "source_directory": "",
+  "destination_directory": "",
+  "is_cnn_detector": false,
+  "cnn_face_detector_file": "./pretrain_models/mmod_human_face_detector.dat",
+  "shape_detector_file": "./pretrain_models/shape_predictor_5_face_landmarks.dat",
+  "template_file": "./pretrain_models/FFHQ_template.npy",
+  "template_scale": 2
+}
