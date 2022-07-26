@@ -2,8 +2,11 @@ import numpy as np
 import cv2
 import os
 
-
+from variable.model import MainModelNameEnum
 from variable.mask import MASK_COLORMAP
+from dataset.custom_dataloader import CustomDataLoader
+from model.psfrgan_model import PSFRGANModel
+from model.fpn_model import FPNModel
 
 
 def tensor_to_numpy(tensor):
@@ -71,3 +74,19 @@ def make_directories(directories):
     else:
         if not os.path.exists(directories):
             os.makedirs(directories)
+
+
+def create_dataset(config):
+    data_loader = CustomDataLoader(config)
+    dataset = data_loader.load_data()
+
+    return dataset
+
+
+def create_model(config):
+    if config.main_model_name == MainModelNameEnum.PSFRGAN:
+        return PSFRGANModel(config)
+    elif config.main_model_name == MainModelNameEnum.FPN:
+        return FPNModel(config)
+    else:
+        raise Exception(f'Main model name is not supported. Main model name: {config.main_model_name}.')

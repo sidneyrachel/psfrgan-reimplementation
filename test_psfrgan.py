@@ -3,10 +3,9 @@ import os
 from tqdm import tqdm
 from PIL import Image
 
-from dataset.util import create_dataset
 from util.config import Config
-from model.util import create_model
-from util.common import make_directories, batch_tensor_to_image, colorize_mask
+from util.common import create_dataset, make_directories, batch_tensor_to_image, \
+    colorize_mask, create_model
 
 
 if __name__ == '__main__':

@@ -7,7 +7,6 @@ import imgaug
 from imgaug import augmenters
 
 from variable.mask import MASK_COLORMAP
-from dataset.custom_dataloader import CustomDataLoader
 
 
 def make_dataset(
@@ -90,9 +89,3 @@ def convert_to_one_hot(image):
 
     return one_hot_label
 
-
-def create_dataset(config):
-    data_loader = CustomDataLoader(config)
-    dataset = data_loader.load_data()
-
-    return dataset

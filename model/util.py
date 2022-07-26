@@ -5,12 +5,10 @@ import torchvision.transforms as transforms
 from PIL import Image
 
 from variable.model import ReluTypeEnum, GenDisNormTypeEnum, \
-    InitWeightTypeEnum, LearningRatePolicyEnum, MainModelNameEnum
+    InitWeightTypeEnum, LearningRatePolicyEnum
 from model.fpn import FPN
 from model.generator import Generator
 from model.multi_scale_discriminator import MultiScaleDiscriminator
-from model.psfrgan_model import PSFRGANModel
-from model.fpn_model import FPNModel
 
 
 def init_weights(
@@ -186,15 +184,6 @@ def get_scheduler(optimizer, config):
         raise Exception(f'Learning rate policy is not supported. Learning rate policy: {config.learning_rate_policy}.')
 
     return scheduler
-
-
-def create_model(config):
-    if config.main_model_name == MainModelNameEnum.PSFRGAN:
-        return PSFRGANModel(config)
-    elif config.main_model_name == MainModelNameEnum.FPN:
-        return FPNModel(config)
-    else:
-        raise Exception(f'Main model name is not supported. Main model name: {config.main_model_name}.')
 
 
 def scale_image_by_width(image, target_width, method=Image.BICUBIC):
