@@ -3,11 +3,11 @@ from torch import optim, nn
 
 from model.util import build_fpn, build_generator, build_discriminator
 from variable.model import GenDisNormTypeEnum, ModelNameEnum, LossNameEnum, VisualNameEnum
-from perceptual_loss_feature import PerceptualLossFeature
-from fm_loss import FMLoss
-from gan_loss import GANLoss
-from perceptual_loss import PerceptualLoss
-from region_style_loss import RegionStyleLoss
+from model.perceptual_loss_feature import PerceptualLossFeature
+from model.fm_loss import FMLoss
+from model.gan_loss import GANLoss
+from model.perceptual_loss import PerceptualLoss
+from model.region_style_loss import RegionStyleLoss
 from util.common import tensor_to_numpy, batch_numpy_to_image, colorize_mask
 from model.base_model import BaseModel
 

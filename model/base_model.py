@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 from variable.model import LearningRatePolicyEnum
 from model.util import get_scheduler
 
+
 class BaseModel(ABC):
     def __init__(self, config):
         """Initialize the BaseModel class.
