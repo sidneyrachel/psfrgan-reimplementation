@@ -2,17 +2,17 @@
   "is_train": false,
   "phase": "test",
   "fpn_pretrained_weight_file": "./pretrain_models/parse_multi_iter_90000.pth",
-  "psfr_pretrained_weight_file": "",
+  "psfr_pretrained_weight_file": "./pretrain_models/psfrgan_epoch15_net_G.pth",
   "dataset_name": "test",
   "num_thread": 0,
   "batch_size": 2,
   "is_shuffled": false,
-  "dataset_base_path": "../datasets/CelebAHQ",
+  "dataset_base_path": "../datasets/CelebAHQ_preprocessed",
   "test_in_channel": 3,
   "preprocess": null,
   "scale_size": 512,
   "crop_size": 256,
   "is_flipped": false,
   "main_model_name": "psfrgan",
-  "destination_directory": "../output_datasets/CelebAHQ"
+  "destination_directory": "../datasets/CelebAHQ_enhanced"
 }

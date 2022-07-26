@@ -1,6 +1,6 @@
 {
-  "source_directory": "",
-  "destination_directory": "",
+  "source_directory": "../datasets/CelebAHQ",
+  "destination_directory": "../datasets/CelebAHQ_preprocessed",
   "is_cnn_detector": false,
   "cnn_face_detector_file": "./pretrain_models/mmod_human_face_detector.dat",
   "shape_detector_file": "./pretrain_models/shape_predictor_5_face_landmarks.dat",
