@@ -1,0 +1,11 @@
+{
+  "low_res_size": 512,
+  "high_res_size": 512,
+  "max_data_count": 2800,
+  "dataset_base_path": "../datasets/CelebAHQ",
+  "dataset_name": "celeb_a_hq",
+  "batch_size": 1,
+  "is_shuffled": true,
+  "num_thread": 8,
+  "is_train": false
+}

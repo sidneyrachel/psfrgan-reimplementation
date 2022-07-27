@@ -12,14 +12,15 @@ from variable.mask import MASK_COLORMAP
 def make_dataset(
         path,
         max_data_count=None,
-        filename_set=None
+        filename_set=None,
+        ext='.png'
 ):
     paths = []
     filenames = []
 
     for root, _, sub_filenames in sorted(os.walk(path)):
         for filename in sub_filenames:
-            if (filename_set and (filename not in filename_set)) or not filename.endswith('.png'):
+            if (filename_set and (filename not in filename_set)) or not filename.endswith(ext):
                 continue
 
             filenames.append(filename)

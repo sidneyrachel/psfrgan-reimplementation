@@ -3,6 +3,7 @@ from torch.utils.data import DataLoader
 from variable.dataset import DatasetNameEnum
 from dataset.ffhq_dataset import FFHQDataset
 from dataset.test_dataset import TestDataset
+from dataset.celebahq_dataset import CelebAHQDataset
 
 
 class CustomDataLoader:
@@ -13,6 +14,8 @@ class CustomDataLoader:
             self.dataset = FFHQDataset(config)
         elif self.dataset_name == DatasetNameEnum.TEST.value:
             self.dataset = TestDataset(config)
+        elif self.dataset_name == DatasetNameEnum.CELEB_A_HQ.value:
+            self.dataset = CelebAHQDataset(config)
         else:
             raise Exception(f'Dataset name is not supported. Dataset name: {self.dataset_name}.')
 
