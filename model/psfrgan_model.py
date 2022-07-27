@@ -167,6 +167,7 @@ class PSFRGANModel(BaseModel):
                 is_target_real=True,
                 is_for_discriminator=False
             )
+
         self.gen_loss = gen_loss * self.config.gen_lambda / self.config.num_discriminator
 
         total_loss = self.pix_loss + self.pcp_loss + self.fm_loss + self.gen_loss + self.ss_loss
