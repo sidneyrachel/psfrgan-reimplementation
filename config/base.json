@@ -47,5 +47,6 @@
   "crop_size": null,
   "is_flipped": false,
   "destination_directory": null,
-  "seed": 123
+  "seed": 123,
+  "ext": ".png"
 }

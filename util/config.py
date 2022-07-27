@@ -45,6 +45,10 @@ class Config:
         torch.cuda.manual_seed_all(self.config['seed'])
 
     @property
+    def ext(self):
+        return self.config['ext']
+
+    @property
     def seed(self):
         return self.config['seed']
 

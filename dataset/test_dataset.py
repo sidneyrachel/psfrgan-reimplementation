@@ -9,7 +9,8 @@ class TestDataset(Dataset):
     def __init__(self, config):
         self.image_paths, _ = make_dataset(
             path=config.dataset_base_path,
-            max_data_count=config.max_data_count
+            max_data_count=config.max_data_count,
+            ext=config.ext
         )
 
         self.image_paths = sorted(self.image_paths)
