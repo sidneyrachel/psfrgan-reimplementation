@@ -22,10 +22,7 @@ def train(config):
     print(f'Start training. Epoch: {config.resume_epoch}. Iteration: {resume_iteration}.')
 
     for current_epoch in range(config.resume_epoch, config.num_epoch + 1):
-        for current_epoch_iteration, data in enumerate(dataset):
-            if current_epoch_iteration < start_iteration:
-                continue
-
+        for current_epoch_iteration, data in enumerate(dataset, start=start_iteration):
             current_iteration += 1
             logger.set_current_iteration(current_iteration)
 

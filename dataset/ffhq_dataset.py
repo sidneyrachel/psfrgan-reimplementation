@@ -43,17 +43,19 @@ class FFHQDataset(Dataset):
         mask_path = self.mask_paths[item]
 
         high_res_image = Image.open(image_path).convert('RGB')
+        mask_image = Image.open(mask_path).convert('RGB')
+
         high_res_image = high_res_image.resize((self.high_res_size, self.high_res_size))
         high_res_image = apply_random_gray(high_res_image, prob=0.3)
-        high_res_tensor = self.to_tensor(high_res_image)
 
         low_res_image = run_image_augmentation(image=high_res_image, high_res_size=self.high_res_size)
-        low_res_tensor = self.to_tensor(low_res_image)
 
-        mask_image = Image.open(mask_path).convert('RGB')
         mask_image = mask_image.resize((self.high_res_size, self.high_res_size))
         mask_label = convert_to_one_hot(mask_image)
         mask_label = torch.tensor(mask_label).float()
+
+        high_res_tensor = self.to_tensor(high_res_image)
+        low_res_tensor = self.to_tensor(low_res_image)
 
         return {
             'hr': high_res_tensor,
