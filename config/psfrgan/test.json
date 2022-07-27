@@ -7,12 +7,12 @@
   "num_thread": 0,
   "batch_size": 2,
   "is_shuffled": false,
-  "dataset_base_path": "../datasets/CelebAHQ_preprocessed",
+  "dataset_base_path": "../datasets/CelebAHQ/lr",
   "test_in_channel": 3,
   "preprocess": null,
   "scale_size": 256,
   "crop_size": 256,
   "is_flipped": false,
   "main_model_name": "psfrgan",
-  "destination_directory": "../datasets/CelebAHQ_enhanced"
+  "destination_directory": "../datasets/CelebAHQ/sr"
 }
