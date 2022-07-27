@@ -1,6 +1,6 @@
 {
   "is_train": true,
-  "max_data_count": 40000,
+  "max_data_count": 35000,
   "phase": "train",
   "dataset_base_path": "../datasets/FFHQ",
   "main_model_name": "psfrgan",
