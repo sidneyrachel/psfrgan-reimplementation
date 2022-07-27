@@ -20,7 +20,10 @@ class Logger():
 
         existing_log = None
 
-        make_directories([config.log_directory, config.log_archive_directory, self.log_directory])
+        make_directories([
+            config.log_directory,
+            config.log_archive_directory
+        ])
 
         for log_name in os.listdir(config.log_directory):
             if config.experiment_name in log_name:
@@ -30,6 +33,8 @@ class Logger():
             old_directory = os.path.join(config.log_directory, existing_log)
             archive_directory = os.path.join(config.log_archive_directory, existing_log)
             shutil.move(old_directory, archive_directory)
+
+        make_directories(self.log_directory)
 
         self.make_log_file()
 
