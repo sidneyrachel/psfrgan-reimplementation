@@ -7,6 +7,7 @@ from util.config import Config
 def train(config):
     dataset = create_dataset(config)
     dataset_size = len(dataset)
+    print(f'Number of training images: {dataset_size}.')
 
     model = create_model(config)
     model.setup(config)
@@ -38,6 +39,7 @@ def train(config):
             timer.update_time('Backward')
 
             if current_iteration % config.print_iteration_frequency == 0:
+                print('Iteration progress:')
                 epoch_progress_detail = '{:03d}|{:05d}/{:05d}'.format(
                     current_epoch,
                     current_epoch_iteration,
