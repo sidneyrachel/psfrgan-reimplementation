@@ -33,7 +33,7 @@ class Logger():
 
         self.make_log_file()
 
-        self.writer = SummaryWriter(self.log_directory)
+        # self.writer = SummaryWriter(self.log_directory)
 
     def make_log_file(self):
         self.text_files = OrderedDict()
@@ -50,30 +50,33 @@ class Logger():
     def record_losses(self, items):
         self.iteration_logs.append(items)
 
-        for key, value in items.items():
-            if 'loss' in key.lower():
-                self.writer.add_scalar(f'loss/{key}', value, self.current_iteration)
+        # for key, value in items.items():
+        #     if 'loss' in key.lower():
+        #         self.writer.add_scalar(f'loss/{key}', value, self.current_iteration)
 
     def record_scalar(self, items):
-        for key in items.keys():
-            self.writer.add_scalar(f'{key}', items[key], self.current_iteration)
+        pass
+        # for key in items.keys():
+        #     self.writer.add_scalar(f'{key}', items[key], self.current_iteration)
 
     def record_images(self, visual_images, num_row=6, tag='ckpt_image'):
-        images = []
-        max_len = visual_images[0].shape[0]
-
-        for i in range(num_row):
-            if i >= max_len:
-                continue
-
-            tmp_images = [image[i] for image in visual_images]
-            images.append(np.hstack(tmp_images))
-
-        images = np.vstack(images).astype(np.uint8)
-        self.writer.add_image(tag, images, self.current_iteration, dataformats='HWC')
+        pass
+        # images = []
+        # max_len = visual_images[0].shape[0]
+        #
+        # for i in range(num_row):
+        #     if i >= max_len:
+        #         continue
+        #
+        #     tmp_images = [image[i] for image in visual_images]
+        #     images.append(np.hstack(tmp_images))
+        #
+        # images = np.vstack(images).astype(np.uint8)
+        # self.writer.add_image(tag, images, self.current_iteration, dataformats='HWC')
 
     def record_text(self, tag, text):
-        self.writer.add_text(tag, text)
+        pass
+        # self.writer.add_text(tag, text)
 
     def print_iteration_summary(
             self,
@@ -98,5 +101,6 @@ class Logger():
             f.write(f'{message}\n')
 
     def close(self):
-        self.writer.export_scalars_to_json(os.path.join(self.log_directory, 'all_scalars.json'))
-        self.writer.close()
+        pass
+        # self.writer.export_scalars_to_json(os.path.join(self.log_directory, 'all_scalars.json'))
+        # self.writer.close()
