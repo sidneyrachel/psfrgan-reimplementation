@@ -23,7 +23,7 @@ if __name__ == '__main__':
     ])
 
     for i, data in tqdm(enumerate(dataset)):
-        print(f'[{i}/{len(dataset)}]Generate lr-hr images.')
+        print(f'[{i}/{len(dataset)}] Generate lr-hr images.')
 
         high_res_images = batch_tensor_to_image(data['hr'])
         low_res_images = batch_tensor_to_image(data['lr'])
