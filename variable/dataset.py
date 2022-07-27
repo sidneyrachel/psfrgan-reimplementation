@@ -3,7 +3,7 @@ from enum import Enum
 
 class DatasetNameEnum(Enum):
     FFHQ = 'ffhq'
-    TEST = 'test',
+    TEST = 'test'
     CELEB_A_HQ = 'celeb_a_hq'
 
 
