@@ -20,7 +20,7 @@ class Logger():
 
         existing_log = None
 
-        make_directories([config.log_directory, config.log_archive_directory])
+        make_directories([config.log_directory, config.log_archive_directory, self.log_directory])
 
         for log_name in os.listdir(config.log_directory):
             if config.experiment_name in log_name:
