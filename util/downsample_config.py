@@ -1,7 +1,7 @@
 import json
 
 
-class TestGenerationConfig:
+class DownsampleConfig:
     def __init__(self, filename):
         config_file = open(filename)
         self.config = json.load(config_file)

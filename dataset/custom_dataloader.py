@@ -4,7 +4,7 @@ from variable.dataset import DatasetNameEnum
 from dataset.ffhq_dataset import FFHQDataset
 from dataset.test_dataset import TestDataset
 from dataset.celebahq_dataset import CelebAHQDataset
-
+from dataset.eval_dataset import EvalDataset
 
 class CustomDataLoader:
     def __init__(self, config):
@@ -16,6 +16,8 @@ class CustomDataLoader:
             self.dataset = TestDataset(config)
         elif self.dataset_name == DatasetNameEnum.CELEB_A_HQ.value:
             self.dataset = CelebAHQDataset(config)
+        elif self.dataset_name == DatasetNameEnum.EVAL.value:
+            self.dataset = EvalDataset(config)
         else:
             raise Exception(f'Dataset name is not supported. Dataset name: {self.dataset_name}.')
 

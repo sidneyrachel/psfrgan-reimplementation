@@ -5,6 +5,7 @@ class DatasetNameEnum(Enum):
     FFHQ = 'ffhq'
     TEST = 'test'
     CELEB_A_HQ = 'celeb_a_hq'
+    EVAL = 'eval'
 
 
 class PreprocessActionEnum(Enum):

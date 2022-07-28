@@ -2,14 +2,14 @@ import os
 from tqdm import tqdm
 from PIL import Image
 
-from util.test_generation_config import TestGenerationConfig
+from util.downsample_config import DownsampleConfig
 from util.create import create_dataset
 from util.common import batch_tensor_to_image, make_directories
 
 
 if __name__ == '__main__':
-    config = TestGenerationConfig(
-        filename='./config/test_generation.json'
+    config = DownsampleConfig(
+        filename='./config/downsample.json'
     )
 
     dataset = create_dataset(config)

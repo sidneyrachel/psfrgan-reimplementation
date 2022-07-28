@@ -3,7 +3,7 @@ from model.preprocessing import Preprocessing
 
 if __name__ == '__main__':
     config = PreprocessConfig(
-        filename='config/preprocessing.json'
+        filename='config/preprocess.json'
     )
 
     preprocessing = Preprocessing(config)

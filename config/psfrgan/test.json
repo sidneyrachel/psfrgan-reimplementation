@@ -14,6 +14,6 @@
   "crop_size": 256,
   "is_flipped": false,
   "main_model_name": "psfrgan",
-  "destination_directory": "../datasets/CelebAHQ/test_ref",
+  "destination_directory": "../datasets/CelebAHQ/test",
   "ext": ".jpg"
 }

@@ -1,0 +1,13 @@
+{
+  "low_res_size": 512,
+  "high_res_size": 512,
+  "max_data_count": 2800,
+  "ground_truth_dataset_path": "../datasets/CelebAHQ/hr",
+  "predicted_dataset_path": "../datasets/CelebAHQ/test/sr",
+  "dataset_name": "eval",
+  "batch_size": 2800,
+  "is_shuffled": false,
+  "num_thread": 8,
+  "is_train": false,
+  "ext": ".jpg"
+}

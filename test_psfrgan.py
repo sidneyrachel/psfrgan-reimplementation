@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     low_res_directory = os.path.join(config.destination_directory, 'lr')
     make_directories(low_res_directory)
-    high_res_directory = os.path.join(config.destination_directory, 'hr')
+    high_res_directory = os.path.join(config.destination_directory, 'sr')
     make_directories(high_res_directory)
     mask_directory = os.path.join(config.destination_directory, 'mask')
     make_directories(mask_directory)
