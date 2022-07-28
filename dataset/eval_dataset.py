@@ -36,3 +36,6 @@ class EvalDataset(Dataset):
             'hr': hr_tensor,
             'sr': sr_tensor
         }
+
+    def __len__(self):
+        return len(self.hr_paths)

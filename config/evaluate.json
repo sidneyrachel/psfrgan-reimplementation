@@ -5,9 +5,9 @@
   "ground_truth_dataset_path": "../datasets/CelebAHQ/hr",
   "predicted_dataset_path": "../datasets/CelebAHQ/test/sr",
   "dataset_name": "eval",
-  "batch_size": 2800,
+  "batch_size": 1,
   "is_shuffled": false,
-  "num_thread": 8,
+  "num_thread": 2,
   "is_train": false,
   "ext": ".jpg"
 }
