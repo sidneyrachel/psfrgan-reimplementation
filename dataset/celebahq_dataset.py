@@ -37,7 +37,8 @@ class CelebAHQDataset(Dataset):
 
         high_res_image = Image.open(image_path).convert('RGB')
         high_res_image = high_res_image.resize((self.high_res_size, self.high_res_size))
-        high_res_image = apply_random_gray(high_res_image, prob=0.3)
+        # TODO: Check if this is true?
+        # high_res_image = apply_random_gray(high_res_image, prob=0.3)
 
         low_res_image = run_image_augmentation(image=high_res_image, high_res_size=self.high_res_size)
 
