@@ -1,8 +1,9 @@
+import torch
 from tqdm import tqdm
-from torchmetrics import PeakSignalNoiseRatio, StructuralSimilarityIndexMeasure, \
-    MultiScaleStructuralSimilarityIndexMeasure
+from torchmetrics import PeakSignalNoiseRatio
 from torchmetrics.image.lpip import LearnedPerceptualImagePatchSimilarity
-from cleanfid import fid
+from torchmetrics.functional import multiscale_structural_similarity_index_measure, \
+    structural_similarity_index_measure
 
 from util.evaluate_config import EvaluateConfig
 from util.create import create_dataset
@@ -15,28 +16,55 @@ if __name__ == '__main__':
 
     dataset = create_dataset(config)
 
-    psnr = PeakSignalNoiseRatio()
-    ssim = StructuralSimilarityIndexMeasure()
-    ms_ssim = MultiScaleStructuralSimilarityIndexMeasure()
-    lpips = LearnedPerceptualImagePatchSimilarity(net_type='vgg')
+    dataset_size = len(dataset)
+    data_range = 2
 
-    fid_score = fid.compute_fid(config.predicted_dataset_path, config.ground_truth_dataset_path)
+    psnr = PeakSignalNoiseRatio(
+        compute_on_cpu=True,
+        data_range=data_range
+    )
+    lpips = LearnedPerceptualImagePatchSimilarity(
+        net_type='vgg',
+        compute_on_cpu=True,
+        data_range=data_range
+    )
 
-    psnr_total = 0
+    if len(config.gpu_ids) > 0:
+        assert(torch.cuda.is_available())
+        psnr = psnr.to(config.device)
+        lpips = lpips.to(config.device)
+
     ssim_total = 0
     ms_ssim_total = 0
-    lpips_total = 0
 
-    num_batch = len(dataset) / config.batch_size
+    num_batch = dataset_size // config.batch_size
 
-    for data in tqdm(dataset):
-        psnr_total += psnr(data['sr'], data['hr'])
-        ssim_total += ssim(data['sr'], data['hr'])
-        ms_ssim_total += ms_ssim(data['sr'], data['hr'])
-        lpips_total += lpips(data['sr'], data['hr'])
+    print(f'Total batch: {num_batch}.')
 
-    print('PSNR:', psnr_total / num_batch)
-    print('SSIM:', ssim_total / num_batch)
-    print('MS-SSIM:', ms_ssim_total / num_batch)
-    print('LPIPS:', lpips_total / num_batch)
-    print('FID:', fid_score)
+    for i, data in tqdm(enumerate(dataset)):
+        print(f'[{i}/{num_batch}] Calculate metrics.')
+        data['sr'] = data['sr'].to(config.device)
+        data['hr'] = data['hr'].to(config.device)
+
+        psnr(data['sr'], data['hr'])
+        lpips(data['sr'], data['hr'])
+
+        ssim_total += (
+                structural_similarity_index_measure(
+                    data['sr'],
+                    data['hr'],
+                    data_range=data_range
+                ) * config.batch_size
+        )
+        ms_ssim_total += (
+                multiscale_structural_similarity_index_measure(
+                    data['sr'],
+                    data['hr'],
+                    data_range=data_range
+                ) * config.batch_size
+        )
+
+    print('PSNR:', psnr.compute())
+    print('LPIPS:', lpips.compute())
+    print('SSIM:', ssim_total / dataset_size)
+    print('MS-SSIM:', ms_ssim_total / dataset_size)

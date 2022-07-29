@@ -1,4 +1,7 @@
+import torch
 import json
+
+from util.common import get_gpu_memory_map
 
 
 class EvaluateConfig:
@@ -6,9 +9,34 @@ class EvaluateConfig:
         config_file = open(filename)
         self.config = json.load(config_file)
 
+        if self.config['num_gpu'] > 0:
+            self.config['gpu_ids'] = get_gpu_memory_map()[1][:self.config['num_gpu']]
+
+            if not isinstance(self.config['gpu_ids'], list):
+                self.config['gpu_ids'] = [self.config['gpu_ids']]
+
+            torch.cuda.set_device(self.config['gpu_ids'][0])
+
+            self.config['device'] = torch.device(f'cuda:{self.config["gpu_ids"][0 % self.config["num_gpu"]]}')
+        else:
+            self.config['gpu_ids'] = []
+            self.config['device'] = torch.device('cpu')
+
     @property
     def low_res_size(self):
         return self.config['low_res_size']
+
+    @property
+    def device(self):
+        return self.config['device']
+
+    @property
+    def gpu_ids(self):
+        return self.config['gpu_ids']
+
+    @property
+    def num_gpu(self):
+        return self.config['num_gpu']
 
     @property
     def high_res_size(self):

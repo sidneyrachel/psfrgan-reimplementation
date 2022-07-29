@@ -5,9 +5,10 @@
   "ground_truth_dataset_path": "../datasets/CelebAHQ/hr",
   "predicted_dataset_path": "../datasets/CelebAHQ/test/sr",
   "dataset_name": "eval",
-  "batch_size": 1,
+  "batch_size": 10,
   "is_shuffled": false,
-  "num_thread": 2,
+  "num_thread": 8,
   "is_train": false,
-  "ext": ".jpg"
+  "ext": ".jpg",
+  "num_gpu": 1
 }
