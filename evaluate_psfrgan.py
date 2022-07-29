@@ -53,15 +53,17 @@ if __name__ == '__main__':
                 structural_similarity_index_measure(
                     data['sr'],
                     data['hr'],
-                    data_range=data_range
-                ) * config.batch_size
+                    data_range=data_range,
+                    reduction='sum',
+                )
         )
         ms_ssim_total += (
                 multiscale_structural_similarity_index_measure(
                     data['sr'],
                     data['hr'],
-                    data_range=data_range
-                ) * config.batch_size
+                    data_range=data_range,
+                    reduction='sum'
+                )
         )
 
     print('PSNR:', psnr.compute())
