@@ -18,7 +18,8 @@ class CelebAHQDataset(Dataset):
         self.image_paths, filename_set = make_dataset(
             path=os.path.join(self.dataset_base_path, 'imgs1024'),
             max_data_count=self.max_data_count,
-            ext='.jpg'
+            ext='.jpg',
+            is_random=True
         )
 
         print(f'number of images: {len(self.image_paths)}')

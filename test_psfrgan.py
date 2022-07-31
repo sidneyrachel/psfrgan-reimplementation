@@ -22,7 +22,6 @@ if __name__ == '__main__':
     fpn_model = model.fpn_model
     gen_model = model.gen_model
     model.eval()
-    maximum_epoch = 9999
 
     low_res_directory = os.path.join(config.destination_directory, 'lr')
     make_directories(low_res_directory)
@@ -31,7 +30,7 @@ if __name__ == '__main__':
     mask_directory = os.path.join(config.destination_directory, 'mask')
     make_directories(mask_directory)
 
-    for current_epoch, data in tqdm(enumerate(dataset), total=len(dataset) // config.batch_size):
+    for current_iteration, data in tqdm(enumerate(dataset), total=len(dataset) // config.batch_size):
         inp = data['lr']
 
         with torch.no_grad():
@@ -56,6 +55,3 @@ if __name__ == '__main__':
             save_path = os.path.join(mask_directory, os.path.basename(image_paths[i]))
             save_image = Image.fromarray(low_res_masks[i])
             save_image.save(save_path)
-
-        if current_epoch > maximum_epoch:
-            break

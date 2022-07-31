@@ -76,9 +76,9 @@ class Generator(nn.Module):
 
         self.head = nn.Sequential(*heads)
         self.body = nn.Sequential(*bodies)
-        self.upsample = nn.Upsample(scale_factor=2)
 
-    def forward_spade_layer(self, layer, inp, reference_inp):
+    @staticmethod
+    def forward_spade_layer(layer, inp, reference_inp):
         if isinstance(layer, SPADENorm) or isinstance(layer, StyleTransformBlock):
             outp = layer(inp, reference_inp)
         else:

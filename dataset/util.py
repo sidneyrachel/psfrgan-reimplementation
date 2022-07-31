@@ -1,5 +1,6 @@
 import os
 import sys
+import random
 
 import numpy as np
 
@@ -13,24 +14,30 @@ def make_dataset(
         path,
         max_data_count=None,
         filename_set=None,
-        ext='.png'
+        ext='.png',
+        is_random=False
 ):
     paths = []
-    filenames = []
 
     for root, _, sub_filenames in sorted(os.walk(path)):
         for filename in sub_filenames:
             if (filename_set and (filename not in filename_set)) or not filename.endswith(ext):
                 continue
 
-            filenames.append(filename)
-
             path = os.path.join(root, filename)
             paths.append(path)
 
+    if is_random:
+        random.shuffle(paths)
+
     count = min(max_data_count, len(paths)) if max_data_count else len(paths)
 
-    truncated_paths, truncated_filename_set = paths[:count], set(filenames[:count])
+    truncated_paths = paths[:count]
+
+    truncated_filename_set = set()
+
+    for path in truncated_paths:
+        truncated_filename_set.add(os.path.basename(path))
 
     if len(truncated_paths) != len(truncated_filename_set):
         raise Exception(f'Paths and filenames mismatch.'
