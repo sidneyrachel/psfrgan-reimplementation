@@ -2,8 +2,7 @@ import torch
 
 from model.base_model import BaseModel
 from model.util import build_fpn
-from util.common import tensor_to_numpy, colorize_mask, batch_numpy_to_image
-from variable.model import ModelNameEnum, LossNameEnum, VisualNameEnum
+from variable.model import ModelNameEnum, LossNameEnum
 
 
 class FPNModel(BaseModel):
@@ -11,13 +10,6 @@ class FPNModel(BaseModel):
         BaseModel.__init__(self, config)
 
         self.loss_names = [LossNameEnum.FPN.value, LossNameEnum.PIX.value]
-        # self.visual_names = [
-        #     VisualNameEnum.LOW_RES_IMAGE.value,
-        #     VisualNameEnum.SUPER_RES_IMAGE.value,
-        #     VisualNameEnum.PREDICTED_MASK.value,
-        #     VisualNameEnum.GROUND_TRUTH_MASK.value,
-        #     VisualNameEnum.HIGH_RES_IMAGE.value
-        # ]
         self.model_names = [ModelNameEnum.FPN.value]
         self.fpn_model = build_fpn(config)
 
@@ -67,22 +59,3 @@ class FPNModel(BaseModel):
         self.optimizer.zero_grad()  # Clear existing gradients
         self.backward()  # Calculate gradients
         self.optimizer.step()
-
-    def get_current_visual_images(self, size=512):
-        numpy_images = [
-            tensor_to_numpy(self.low_res_image),
-            tensor_to_numpy(self.super_res_image),
-            tensor_to_numpy(self.high_res_image)
-        ]
-
-        out_images = [batch_numpy_to_image(numpy_image, size) for numpy_image in numpy_images]
-
-        visual_images = [
-            out_images[0],
-            out_images[1],
-            colorize_mask(self.predicted_mask),
-            colorize_mask(self.ground_truth_mask.unsqueeze(1)),
-            out_images[2]
-        ]
-
-        return visual_images

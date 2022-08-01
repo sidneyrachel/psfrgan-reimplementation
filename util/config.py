@@ -293,14 +293,6 @@ class Config:
     def print_iteration_frequency(self):
         return self.config['print_iteration_frequency']
 
-    @property
-    def visual_iteration_frequency(self):
-        return self.config['visual_iteration_frequency']
-
-    @property
-    def save_iteration_frequency(self):
-        return self.config['save_iteration_frequency']
-
     # Enum: resize_and_crop | crop | scale_width | scale_width_and_crop
     @property
     def preprocess(self):

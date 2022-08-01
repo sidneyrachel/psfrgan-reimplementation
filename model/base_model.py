@@ -18,7 +18,6 @@ class BaseModel(ABC):
         Then, you need to define four lists:
             -- self.loss_names (str list): Specify the training losses that you want to plot and save.
             -- self.model_names (str list): Define networks used in our training.
-            -- self.visual_names (str list): Specify the images that you want to display and save.
             -- self.optimizers (optimizer list): Define and initialize optimizers.
         """
         self.config = config
@@ -31,7 +30,6 @@ class BaseModel(ABC):
         self.loss_names = []
         self.model_names = []
         self.load_model_names = []
-        # self.visual_names = []
         self.optimizers = []
         self.image_paths = []
 
@@ -72,10 +70,6 @@ class BaseModel(ABC):
     def test(self):
         with torch.no_grad():
             self.forward()
-            self.generate_visual_images()
-
-    def generate_visual_images(self):
-        pass
 
     def get_image_paths(self):
         return self.image_paths
@@ -98,9 +92,6 @@ class BaseModel(ABC):
             learning_rate_map[f'LR{idx}'] = optimizer.param_groups[0]['lr']
 
         return learning_rate_map
-
-    def get_current_visual_images(self, size):
-        pass
 
     def get_current_losses(self):
         loss_map = OrderedDict()

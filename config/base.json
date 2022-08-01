@@ -39,8 +39,6 @@
   "log_directory": "./checkpoints/logs",
   "log_archive_directory": "./checkpoints/log_archives",
   "print_iteration_frequency": 100,
-  "visual_iteration_frequency": 500,
-  "save_iteration_frequency": 1000000000,
   "test_in_channel": 3,
   "preprocess": null,
   "scale_size": null,

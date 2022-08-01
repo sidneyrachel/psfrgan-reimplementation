@@ -2,13 +2,11 @@ import torch
 from torch import optim, nn
 
 from model.util import build_fpn, build_generator, build_discriminator
-from variable.model import GenDisNormTypeEnum, ModelNameEnum, LossNameEnum, VisualNameEnum
+from variable.model import GenDisNormTypeEnum, ModelNameEnum, LossNameEnum
 from model.perceptual_loss_feature import PerceptualLossFeature
 from model.fm_loss import FMLoss
 from model.gan_loss import GANLoss
-from model.perceptual_loss import PerceptualLoss
 from model.region_style_loss import RegionStyleLoss
-from util.common import tensor_to_numpy, batch_numpy_to_image, colorize_mask
 from model.base_model import BaseModel
 
 
@@ -46,13 +44,6 @@ class PSFRGANModel(BaseModel):
             LossNameEnum.DISCRIMINATOR.value,
             LossNameEnum.SEMANTIC_STYLE.value
         ]
-        # self.visual_names = [
-        #     VisualNameEnum.LOW_RES_IMAGE.value,
-        #     VisualNameEnum.SUPER_RES_IMAGE.value,
-        #     VisualNameEnum.HIGH_RES_IMAGE.value,
-        #     VisualNameEnum.LOW_RES_MASK.value,
-        #     VisualNameEnum.HIGH_RES_MASK.value
-        # ]
         self.fm_weights = [1**x for x in range(config.num_discriminator)]
 
         if self.is_train:
@@ -61,7 +52,6 @@ class PSFRGANModel(BaseModel):
 
             self.fm_criterion = FMLoss().to(config.device)
             self.gan_criterion = GANLoss(config.gan_mode).to(config.device)
-            self.perceptual_criterion = PerceptualLoss()
             self.pix_criterion = nn.L1Loss()
             self.region_style_criterion = RegionStyleLoss()
 
@@ -146,11 +136,6 @@ class PSFRGANModel(BaseModel):
             self.high_res_mask
         ) * self.config.ss_lambda
 
-        self.pcp_loss = self.perceptual_criterion(
-            self.super_res_image_feats,
-            self.high_res_image_feats
-        ) * self.config.perceptual_lambda
-
         # Feature matching loss
         fm_loss = 0
 
@@ -180,7 +165,7 @@ class PSFRGANModel(BaseModel):
         for i in range(self.config.num_discriminator):
             self.disc_loss += 0.5 * (
                     self.gan_criterion(
-                        prediction=self.fake_disc_results[i],  # TODO: Check if this is true
+                        prediction=self.fake_disc_results[i],
                         is_target_real=False
                     ) +
                     self.gan_criterion(
@@ -203,19 +188,3 @@ class PSFRGANModel(BaseModel):
         self.discriminator_optimizer.zero_grad()
         self.discriminator_backward()
         self.discriminator_optimizer.step()
-
-    def get_current_visual_images(self, size=512):
-        numpy_images = [
-            tensor_to_numpy(self.low_res_image),
-            tensor_to_numpy(self.super_res_image),
-            tensor_to_numpy(self.high_res_image)
-        ]
-
-        out_images = [batch_numpy_to_image(numpy_image, size) for numpy_image in numpy_images]
-
-        visual_images = []
-        visual_images += out_images
-        visual_images.append(colorize_mask(self.one_hot_low_res_mask, size))
-        visual_images.append(colorize_mask(self.high_res_mask, size))
-
-        return visual_images
