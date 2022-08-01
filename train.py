@@ -53,20 +53,6 @@ def train(config):
                     timer=timer
                 )
 
-            if current_iteration % config.visual_iteration_frequency == 0:
-                visual_images = model.get_current_visual_images()
-                logger.record_images(visual_images)
-
-            if current_iteration % config.save_iteration_frequency == 0:
-                print(f'Saving current model. Epoch: {current_epoch}. Iteration: {current_iteration}.')
-                save_prefix = f'iter_{current_iteration}'
-                info = {
-                    'resume_epoch': current_epoch,
-                    'resume_iter_on_top_resume_epoch': current_epoch_iteration + 1
-                }
-
-                model.save_networks(save_prefix, info)
-
             if current_epoch_iteration >= num_iteration_on_one_epoch - 1:
                 start_iteration = 0
                 break
@@ -88,8 +74,6 @@ def train(config):
 
         if config.is_debug and current_epoch >= 0:
             break
-
-    logger.close()
 
 
 if __name__ == '__main__':
