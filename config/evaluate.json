@@ -3,7 +3,7 @@
   "high_res_size": 512,
   "max_data_count": 2800,
   "ground_truth_dataset_path": "../datasets/CelebAHQ/hr",
-  "predicted_dataset_path": "../datasets/CelebAHQ/test/sr",
+  "predicted_dataset_path": "../datasets/CelebAHQ/ist00-e20/sr",
   "dataset_name": "eval",
   "batch_size": 10,
   "is_shuffled": false,
