@@ -1,5 +1,5 @@
 # Reimplementation of Progressive Semantic-Aware Style Transformation for Blind Face Restoration
-Full explanation of this project can be found at <insert-blog>.
+Full explanation of this project can be found [here](https://qiita.com/rachelsidney/items/f1cbc6f6cb1a66407781).
 
 ## Prerequisite
 1. Python 3.7
